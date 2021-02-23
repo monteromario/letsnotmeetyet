@@ -1,0 +1,10 @@
+footer {
+    position: fixed;
+    height: 56px;
+    bottom: 0;
+    width: 100%;
+}
+
+.main-logo {
+    max-width: 300px;
+}
