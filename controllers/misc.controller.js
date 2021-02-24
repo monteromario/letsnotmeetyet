@@ -1,3 +1,6 @@
+const User = require("../models/User.model");
+
 module.exports.home = (req, res, next) => {
-      res.render("home",);
+      User.find()
+      .then(users => res.render("home", {users}))
 };
