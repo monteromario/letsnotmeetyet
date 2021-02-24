@@ -15,7 +15,12 @@ router.get("/", miscController.home);
 // // Users
 
 router.get("/register", secure.isNotAuthenticated, usersController.register);
-// router.post("/register", secure.isNotAuthenticated, usersController.doRegister);
+router.post(
+    "/register", 
+    secure.isNotAuthenticated, 
+    upload.any(),
+    usersController.doRegister);
+
 router.get("/login", secure.isNotAuthenticated, usersController.login);
 // router.post("/login", secure.isNotAuthenticated, usersController.doLogin);
 // router.get(

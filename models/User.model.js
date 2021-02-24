@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema({
   },
   preferences: {
     type: String,
-    enum: ['Male', 'Female', 'Both'],
+    enum: ['Male', 'Female', 'All'],
     required: 'Preference required.'
   },
   location: {
@@ -69,7 +69,7 @@ const userSchema = new mongoose.Schema({
   },
   profilePictures: {
       type: [String],
-      default: [],
+      default: ['https://res.cloudinary.com/letsnotmeetyet/image/upload/v1614195193/letsnotmeetyet/pictures/unknown_user_ia1je9.png'],
     },
   role: {
     type: String,
