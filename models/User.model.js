@@ -57,20 +57,20 @@ const userSchema = new mongoose.Schema({
     required: 'Preference required.'
   },
   location: {
-      type: {
-        type: String,
-        enum: ['Point'],
-        default: 'Point'
-      },
-      coordinates: {
-        type: [Number],
-        required: true
-      }
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point'
+    },
+    coordinates: {
+      type: [Number], //[longitude, latitude]
+      required: true
+    }
   },
   profilePictures: {
-      type: [String],
-      default: ['https://res.cloudinary.com/letsnotmeetyet/image/upload/v1614195193/letsnotmeetyet/pictures/unknown_user_ia1je9.png'],
-    },
+    type: [String],
+    default: ['https://res.cloudinary.com/letsnotmeetyet/image/upload/v1614195193/letsnotmeetyet/pictures/unknown_user_ia1je9.png'],
+  },
   role: {
     type: String,
     enum: ['ADMIN', 'USER'],
@@ -110,6 +110,9 @@ userSchema.pre("save", function (next) {
     next();
   }
 });
+
+userSchema.index({ location: '2dsphere' });
+
 
 // userSchema.virtual('likes', {
 // 	ref: 'Like',
