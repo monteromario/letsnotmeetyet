@@ -8,3 +8,7 @@ footer {
 .main-logo {
     max-width: 300px;
 }
+
+#map {
+    height: 400px;
+}
