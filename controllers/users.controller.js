@@ -22,5 +22,14 @@ module.exports.doRegister = (req, res, next) => {
     }
     req.body.profilePictures = pictureArray;
   }
-  User.create(req.body).then(() => res.send(req.body));
+  req.body.location = {
+    type: 'Point',
+    coordinates: [Number(req.body.lng), Number(req.boby.lat)]
+  }
+
+  console.log(req.body)
+
+  User.create(req.body)
+    .then(() => res.send(req.body))
+    .catch(e => console.log('error creating user: ', e));
 };
