@@ -1,102 +1,113 @@
 <div class="container">
-    <div class="text-center py-5">
-        <h3>Join <strong>Let's N<i class="fas fa-virus"></i>t Meet Yet</strong> community</h3>
-    </div>
-    <form class="pb-5" action="/register" method="POST" enctype="multipart/form-data">
-        <div class="row mb-3">
-        <label for="inputUsername" class="col-sm-2 col-form-label">User name</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputUsername" name="username">
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-        <div class="col-sm-10">
-            <input type="email" class="form-control" id="inputEmail" name="email">
-            </div>
-        </div>
-        <div class="row mb-3">
-        <label for="inputFirstName" class="col-sm-2 col-form-label">First name</label>
-        <div class="col-sm-10">
-        <input type="text" class="form-control" id="inputFirstName" name="firstName">
-        </div>
-        </div>
-        <div class="row mb-3">
-        <label for="inputLastName" class="col-sm-2 col-form-label">Last name</label>
-        <div class="col-sm-10">
-        <input type="text" class="form-control" id="inputLastName" name="lastName">
-        </div>
+  <div class="text-center py-5">
+    <h3>Join <strong>Let's N<i class="fas fa-virus"></i>t Meet Yet</strong> community</h3>
+  </div>
+  <form class="pb-5" action="/register" method="POST" enctype="multipart/form-data">
+    <div class="row mb-3">
+      <label for="inputUsername" class="col-sm-2 col-form-label">User name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="inputUsername" name="username">
+      </div>
     </div>
     <div class="row mb-3">
-        <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-        <div class="col-sm-10">
+      <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+      <div class="col-sm-10">
+        <input type="email" class="form-control" id="inputEmail" name="email">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="inputFirstName" class="col-sm-2 col-form-label">First name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="inputFirstName" name="firstName">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="inputLastName" class="col-sm-2 col-form-label">Last name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="inputLastName" name="lastName">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+      <div class="col-sm-10">
         <input type="password" class="form-control" id="inputPassword" name="password">
-        </div>
+      </div>
     </div>
     <fieldset class="row mb-3">
-        <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
-        <div class="col-sm-10">
+      <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+      <div class="col-sm-10">
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="gender" id="radio1" value="Male">
-            <label class="form-check-label" for="radio1">
+          <input class="form-check-input" type="radio" name="gender" id="radio1" value="Male">
+          <label class="form-check-label" for="radio1">
             Male
-            </label>
+          </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="gender" id="radio2" value="Female">
-            <label class="form-check-label" for="radio2">
+          <input class="form-check-input" type="radio" name="gender" id="radio2" value="Female">
+          <label class="form-check-label" for="radio2">
             Female
-            </label>
+          </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="gender" id="radio3" value="Other">
-            <label class="form-check-label" for="radio3">
+          <input class="form-check-input" type="radio" name="gender" id="radio3" value="Other">
+          <label class="form-check-label" for="radio3">
             Other
-            </label>
+          </label>
         </div>
-        </div>
+      </div>
     </fieldset>
     <div class="row mb-3">
-        <label for="inputAboutMe" class="col-sm-2 col-form-label">About you</label>
-            <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputAboutMe" name="aboutMe">
-            </div>
-        </div>
-        <fieldset class="row mb-3">
-        <legend class="col-form-label col-sm-2 pt-0">Interested in</legend>
-        <div class="col-sm-10">
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="preferences" id="radio1" value="Male">
-            <label class="form-check-label" for="radio1">
-            Boys
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="preferences" id="radio2" value="Female">
-            <label class="form-check-label" for="radio2">
-            Girls
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="preferences" id="radio3" value="All">
-            <label class="form-check-label" for="radio3">
-            All
-            </label>
-        </div>
-        </div>
-    </fieldset>
-    <div class="row mb-3">
-        <label for="inputLocation" class="col-sm-2 col-form-label">Location</label>
-            <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputLocation" name="location" value="">
-            </div>
-        </div>
-    <div class="row mb-3">
-    <label for="inputPictures" class="col-sm-2 col-form-label">Pictures</label>
-        <div class="col-sm-10">
-        <input type="file" class="form-control" id="inputPictures" name="profilePictures" multiple>
-        </div>
+      <label for="inputAboutMe" class="col-sm-2 col-form-label">About you</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="inputAboutMe" name="aboutMe">
+      </div>
     </div>
-    <button type="submit" class="btn btn-dark mb-5">Sign in</button>
-    </form>
+    <fieldset class="row mb-3">
+      <legend class="col-form-label col-sm-2 pt-0">Interested in</legend>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="preferences" id="radio4" value="Male">
+          <label class="form-check-label" for="radio1">
+            Boys
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="preferences" id="radio5" value="Female">
+          <label class="form-check-label" for="radio2">
+            Girls
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="preferences" id="radio6" value="All">
+          <label class="form-check-label" for="radio3">
+            All
+          </label>
+        </div>
+      </div>
+    </fieldset>
+    <div class="row mb-3">
+      <label for="inputPictures" class="col-sm-2 col-form-label">Pictures</label>
+      <div class="col-sm-10">
+        <input type="file" class="form-control" id="inputPictures" name="profilePictures" multiple>
+      </div>
+    </div>
+    {{!-- d-none --}}
+    <div class="row mb-3">
+      <label for="inputLocation" class="col-sm-2 col-form-label">Location</label>
+      <div class="mb-3">
+        <input type="string" name="lat" value="{{lat}}" class="form-control" id="lat" required>
+        <input type="string" name="lng" value="{{lng}}" class="form-control" id="lng" required>
+      </div>
+      <div id="map" class="row mb-3"></div>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-dark text-center ml-5 mb-5">Sign in</button>
+    </div>
+  </form>
 </div>
+
+
+<script src="/js/map.js"></script>
+
+<script async src="https://maps.googleapis.com/maps/api/js?key={{mapsKey}}&callback=initMap">
+</script>

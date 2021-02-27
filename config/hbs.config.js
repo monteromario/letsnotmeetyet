@@ -10,3 +10,7 @@ hbs.registerHelper('checkRole', (user, role, options) => {
     return options.inverse()
   }
 })
+
+hbs.registerHelper('json', function (context) {
+  return JSON.stringify(context);
+});

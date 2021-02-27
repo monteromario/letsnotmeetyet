@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="text-center py-5">
+    <h3>MAP</h3>
+    <h1 class="fw-bold py-3">LET'S N<i class="fas fa-virus"></i>T MEET YET</h1>
+
+
+    <div id="map" class="row mb-3"></div>
+
+    <script>
+      let userLocations = {{{ json userLocations }}}
+    </script>
+
+    <script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
+
+    <script src="/js/mainMap.js"></script>
+
+    <script async src="https://maps.googleapis.com/maps/api/js?key={{mapsKey}}&callback=initMap">
+    </script>
+
+
+  </div>
+</div>

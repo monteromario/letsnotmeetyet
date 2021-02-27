@@ -24,6 +24,8 @@ a {
     max-width: 300px;
 }
 
+#map {
+    height: 400px;
 .homeLink {
     text-decoration: none;
     color: #000000;

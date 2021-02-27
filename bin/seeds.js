@@ -16,7 +16,7 @@ Promise.all([User.deleteMany()]).then(() => {
       gender: genders[Math.floor(Math.random() * 3)],
       aboutMe: faker.lorem.paragraph(),
       preferences: preferences[Math.floor(Math.random() * 3)],
-      location: { type: 'Point', coordinates: [faker.address.latitude(), faker.address.longitude()] },
+      location: { type: 'Point', coordinates: [faker.address.longitude(), faker.address.latitude()] },
       profilePictures: [faker.image.people()],
       email: faker.internet.email(),
       password: "Abcde1234",
@@ -32,6 +32,7 @@ Promise.all([User.deleteMany()]).then(() => {
     //       seller: u._id,
     //       image: faker.image.image(),
     //     })
-    .then((p) => console.log(`Created ${p.username} with address ${p.location}`));
+    .then((p) => console.log(`Created ${p.username} with address ${p.location}`))
+    .catch(e => console.log(e));
     }
 });
