@@ -1,22 +1,22 @@
 <div class="container">
-    {{!-- <div class="text-center py-5">
-        <h3>Welcome to</h3>
-        <h1 class="fw-bold py-3">LET'S N<i class="fas fa-virus"></i>T MEET YET</h1>
-        <h4 class="text-muted">Meet other Ironhacker's.</h4>
-        <h4 class="text-muted">But remember... you can't meet yet!</h4>
-        <img class="main-logo img-fluid py-3" src="./img/LNMY_logo.png">
-    </div> --}}
-    <div class="row row-cols-1 row-cols-md-3 g-4 pt-3 pb-4 mb-5">
+  {{!-- <div class="text-center py-5">
+    <h3>Welcome to</h3>
+    <h1 class="fw-bold py-3">LET'S N<i class="fas fa-virus"></i>T MEET YET</h1>
+    <h4 class="text-muted">Meet other Ironhacker's.</h4>
+    <h4 class="text-muted">But remember... you can't meet yet!</h4>
+    <img class="main-logo img-fluid py-3" src="./img/LNMY_logo.png">
+  </div> --}}
+  <div class="row row-cols-1 row-cols-md-4 g-4 pt-3 pb-4 mb-5">
     {{#each users}}
-        <div class="col">
-            <div class="card h-100">
-                <img src="{{profilePictures.[0]}}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{username}}</h5>
-                    <p class="card-text">{{aboutMe}}</p>
-                </div>
-            </div>
+    <div class="col">
+      <div class="card h-50" style="width: 20rem;">
+        <img src="{{profilePictures.[0]}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{username}}</h5>
+          <p class="card-text">{{aboutMe}}</p>
         </div>
-    {{/each}}
+      </div>
     </div>
+    {{/each}}
+  </div>
 </div>

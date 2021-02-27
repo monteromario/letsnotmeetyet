@@ -67,7 +67,6 @@ function initMap() {
     });
 
     const coordinates = e.latLng.toJSON();
-    console.log(coordinates);
 
     document.getElementById("lat").value = coordinates.lat;
     document.getElementById("lng").value = coordinates.lng;

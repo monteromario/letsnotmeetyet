@@ -13,18 +13,18 @@ module.exports.register = (req, res, next) => {
 };
 
 module.exports.doRegister = (req, res, next) => {
-  //req.body.location = { type: 'Point', coordinates: [Math.random(), Math.random()] };
-  if (req.files.length > 0) {
-    let pictureArray = [];
-
-    for (i = 0; i < req.files.length; i++) {
-      pictureArray.push(req.files[i].path);
-    }
-    req.body.profilePictures = pictureArray;
-  }
   req.body.location = {
     type: 'Point',
-    coordinates: [Number(req.body.lng), Number(req.boby.lat)]
+    coordinates: [Number(req.body.lng), Number(req.body.lat)]
+  };
+
+  if (req.files.length > 0) {
+    req.body.profilePictures = req.files.map(file => file.path);
+
+    // for (i = 0; i < req.files.length; i++) {
+    //   pictureArray.push(req.files[i].path);
+    // }
+    // req.body.profilePictures = pictureArray;
   }
 
   console.log(req.body)
