@@ -17,7 +17,7 @@ Promise.all([User.deleteMany()]).then(() => {
       aboutMe: faker.lorem.paragraph(),
       preferences: preferences[Math.floor(Math.random() * 3)],
       location: { type: 'Point', coordinates: [faker.address.longitude(), faker.address.latitude()] },
-      profilePictures: [faker.image.image()],
+      profilePictures: [faker.image.people()],
       email: faker.internet.email(),
       password: "Abcde1234",
       active: "true", 

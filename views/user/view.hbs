@@ -1,0 +1,46 @@
+{{#each users}}
+<div class="container pt-3 pb-4 mb-5">
+    <div class="card text-center">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a id="lnkAbout" class="nav-link text-dark active" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a id="lnkPictures" class="nav-link text-dark" href="#">Pictures</a>
+                </li>
+            </ul>
+        </div>
+        <div id="divAbout">
+            <img class="img w-50 pt-2" src="{{#each
+                profilePictures}}{{#if @first}}{{this}}{{/if}}{{/each}}"
+                alt="{{username}}">
+            <div class="card-body">
+                <h5 class="card-title">{{username}}</h5>
+                <p class="card-text">{{aboutMe}}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{firstName}} {{lastName}}</li>
+                <li class="list-group-item">{{gender}}</li>
+                <li class="list-group-item">Interested in: {{preferences}}</li>
+            </ul>
+            <div class="card-body">
+                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
+            </div>
+        </div>
+        <div id="divPictures" hidden>
+            {{#each profilePictures}}
+            <img class="img-fluid p-5" src="{{this}}"
+                alt="{{username}}">
+            {{/each}}
+        </div>
+    </div>
+</div>
+{{/each}}
+
+{{users}}
+
+
+
+<script src="../js/script.js"></script>

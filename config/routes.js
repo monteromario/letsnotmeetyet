@@ -10,6 +10,7 @@ const GOOGLE_SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https:
 
 // Misc
 
+router.get("/search", miscController.search);
 router.get("/", miscController.home);
 
 // // Users
@@ -24,16 +25,16 @@ router.post(
 router.get("/map", usersController.renderMap)
 
 router.get("/login", secure.isNotAuthenticated, usersController.login);
-// router.post("/login", secure.isNotAuthenticated, usersController.doLogin);
-// router.get(
-//   "/activate/:token",
-//   secure.isNotAuthenticated,
-//   usersController.activate
-// );
+router.post("/login", secure.isNotAuthenticated, usersController.doLogin);
+router.get(
+    "/activate/:token",
+    //secure.isNotAuthenticated,
+    usersController.activate
+    );
 // router.get('/authenticate/google', passport.authenticate('google-auth', { scope: GOOGLE_SCOPES }))
 // router.get('/authenticate/google/cb', usersController.doLoginGoogle)
-// router.post("/logout", secure.isAuthenticated, usersController.logout);
-router.get("/profile", secure.isNotAuthenticated, usersController.profile);
+router.get("/logout", secure.isAuthenticated, usersController.logout);
+router.get("/profile", secure.isAuthenticated, usersController.profile);
 // router.get("/wishlist", secure.isAuthenticated, usersController.wishlist);
 // router.get("/users", secure.checkRole('ADMIN'), usersController.list);
 
@@ -49,7 +50,7 @@ router.get("/profile", secure.isNotAuthenticated, usersController.profile);
 //   upload.single("image"),
 //   productsController.doCreate
 // );
-// router.get("/products/:id", productsController.detail);
+router.get("/user/:username", usersController.view);
 // router.get(
 //   "/products/:id/edit",
 //   secure.isAuthenticated,
