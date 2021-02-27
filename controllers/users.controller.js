@@ -12,6 +12,19 @@ module.exports.register = (req, res, next) => {
   res.render("register");
 };
 
+module.exports.renderMap = (req, res, next) => {
+  User.find()
+    .then(users => {
+      const userLocations = users.map(user => {
+        let { username, location: { coordinates } } = user
+        return { username }
+      })
+      console.log(userLocations)
+      res.render("map", { userLocations })
+    })
+    .catch(e => console.log(e))
+};
+
 module.exports.doRegister = (req, res, next) => {
   req.body.location = {
     type: 'Point',
@@ -20,15 +33,7 @@ module.exports.doRegister = (req, res, next) => {
 
   if (req.files.length > 0) {
     req.body.profilePictures = req.files.map(file => file.path);
-
-    // for (i = 0; i < req.files.length; i++) {
-    //   pictureArray.push(req.files[i].path);
-    // }
-    // req.body.profilePictures = pictureArray;
   }
-
-  console.log(req.body)
-
   User.create(req.body)
     .then(() => res.send(req.body))
     .catch(e => console.log('error creating user: ', e));

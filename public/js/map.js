@@ -63,6 +63,7 @@ function initMap() {
 
     mapMarker = new google.maps.Marker({
       position: e.latLng,
+      label: 'YOU',
       map: map,
     });
 
