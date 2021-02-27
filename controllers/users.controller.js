@@ -17,7 +17,7 @@ module.exports.renderMap = (req, res, next) => {
     .then(users => {
       const userLocations = users.map(user => {
         let { username, location: { coordinates } } = user
-        return { username }
+        return { username, coordinates }
       })
       console.log(userLocations)
       res.render("map", { userLocations })
