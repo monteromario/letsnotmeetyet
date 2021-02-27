@@ -43,7 +43,7 @@ module.exports.doRegister = (req, res, next) => {
             res.render("login", {succesMessage: "Register finished. Check you email to validate your account."});
           })
     .catch(e => console.log('error creating user: ', e));
-
+}
 
 module.exports.doLogin = (req, res, next) => {
   passport.authenticate('local-auth', (error, user, validations) => {
