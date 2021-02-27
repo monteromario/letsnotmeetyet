@@ -8,7 +8,7 @@ Promise.all([User.deleteMany()]).then(() => {
   // Create N users
   for (let i = 0; i < 20; i++) {
     let genders = ['Male', 'Female', 'Other'];
-    let preferences = ['Male', 'Female', 'Both'];
+    let preferences = ['Male', 'Female', 'All'];
     User.create({
       username: faker.internet.userName(),
       firstName: faker.name.firstName(),
@@ -17,7 +17,7 @@ Promise.all([User.deleteMany()]).then(() => {
       aboutMe: faker.lorem.paragraph(),
       preferences: preferences[Math.floor(Math.random() * 3)],
       location: { type: 'Point', coordinates: [faker.address.latitude(), faker.address.longitude()] },
-      profilePictures: [faker.image.image()],
+      profilePictures: [faker.image.people()],
       email: faker.internet.email(),
       password: "Abcde1234",
       active: "true", 

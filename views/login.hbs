@@ -1,7 +1,33 @@
 <div class="container">
     <div class="text-center py-5">
-        <h3>LOGIN</h3>
-        <h1 class="fw-bold py-3">LET'S N<i class="fas fa-virus"></i>T MEET YET</h1>
-        <i class="fas fa-virus fa-10x py-5"></i>
+        <h3>Access <strong>Let's N<i class="fas fa-virus"></i>t Meet Yet</strong>
+            community</h3>
+        {{#if succesMessage}}
+        <div class="alert alert-success mt-5" role="alert">
+            {{succesMessage}}
+        </div>
+        {{/if}}
+        {{#if errorMessage}}
+        <div class="alert alert-danger mt-5" role="alert">
+            {{errorMessage}}
+        </div>
+        {{/if}}
+        <form class="p-5" action="/login" method="POST">
+            <div class="row mb-3 d-flex justify-content-center">
+                <label for="inputUsername" class="col-sm-2 col-form-label">E-mail</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="inputUsername"
+                        name="email" value="{{username}}">
+                </div>
+            </div>
+            <div class="row mb-3 d-flex justify-content-center">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-5">
+                    <input type="password" class="form-control"
+                        id="inputPassword" name="password">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-dark mt-3 mb-5">Log in</button>
+        </form>
     </div>
 </div>
