@@ -27,7 +27,6 @@ module.exports.renderMap = (req, res, next) => {
         userPicture = profilePictures[0]
         return { username, coordinates, userPicture }
       })
-      console.log(userLocations)
       res.render("map", { userLocations })
     })
     .catch(e => console.log(e))
@@ -42,12 +41,20 @@ module.exports.doRegister = (req, res, next) => {
   if (req.files.length > 0) {
     req.body.profilePictures = req.files.map(file => file.path);
   }
+console.log(req.body)
+  User.find({$or:[{email: req.body.email},{username: req.body.username}]})
+  .then(user => res.render("register", { errorMessage: "Username or email already in use. Log in or try a different combination."}))
+  .catch(next)
+
   User.create(req.body)
     .then((u) => {
       sendActivationEmail(u.email, u.firstName, u.activationToken);
       res.render("login", { succesMessage: "Register finished. Check you email to validate your account." });
     })
-    .catch(e => console.log('error creating user: ', e));
+    .catch(e => {
+      console.log('error creating user: ', e);
+      res.render('register', { errorMessage: e })
+    });
 }
 
 module.exports.doLogin = (req, res, next) => {
@@ -64,6 +71,21 @@ module.exports.doLogin = (req, res, next) => {
     }
   })(req, res, next);
 };
+
+module.exports.doLoginGoogle = (req, res, next) => {
+  passport.authenticate('google-auth', (error, user, validations) => {
+    if (error) {
+      next(error);
+    } else if (!user) {
+      res.status(400).render('login', { user: req.body, errorMessage: validations.error });
+    } else {
+      req.login(user, loginErr => {
+        if (loginErr) next(loginErr)
+        else res.redirect('/')
+      })
+    }
+  })(req, res, next)
+}
 
 module.exports.view = (req, res, next) => {
   User.find({ username: req.params.username })

@@ -31,8 +31,8 @@ router.get(
     //secure.isNotAuthenticated,
     usersController.activate
     );
-// router.get('/authenticate/google', passport.authenticate('google-auth', { scope: GOOGLE_SCOPES }))
-// router.get('/authenticate/google/cb', usersController.doLoginGoogle)
+router.get('/authenticate/google', passport.authenticate('google-auth', { scope: GOOGLE_SCOPES }))
+router.get('/authenticate/google/callback', usersController.doLoginGoogle)
 router.get("/logout", secure.isAuthenticated, usersController.logout);
 router.get("/profile", secure.isAuthenticated, usersController.profile);
 router.get("/profile/edit", secure.isAuthenticated, usersController.editProfile);
