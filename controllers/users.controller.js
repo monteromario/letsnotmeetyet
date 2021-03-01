@@ -23,8 +23,9 @@ module.exports.renderMap = (req, res, next) => {
   User.find()
     .then(users => {
       const userLocations = users.map(user => {
-        let { username, location: { coordinates } } = user
-        return { username, coordinates }
+        let { username, location: { coordinates }, profilePictures } = user
+        userPicture = profilePictures[0]
+        return { username, coordinates, userPicture }
       })
       console.log(userLocations)
       res.render("map", { userLocations })
@@ -43,9 +44,9 @@ module.exports.doRegister = (req, res, next) => {
   }
   User.create(req.body)
     .then((u) => {
-            sendActivationEmail(u.email, u.firstName, u.activationToken);
-            res.render("login", {succesMessage: "Register finished. Check you email to validate your account."});
-          })
+      sendActivationEmail(u.email, u.firstName, u.activationToken);
+      res.render("login", { succesMessage: "Register finished. Check you email to validate your account." });
+    })
     .catch(e => console.log('error creating user: ', e));
 }
 
@@ -65,10 +66,10 @@ module.exports.doLogin = (req, res, next) => {
 };
 
 module.exports.view = (req, res, next) => {
-      User.find({username: req.params.username})
-      .then(users => {
-            res.render('user/view', {users})
-      })
+  User.find({ username: req.params.username })
+    .then(users => {
+      res.render('user/view', { users })
+    })
 };
 
 module.exports.logout = (req, res, next) => {
