@@ -14,3 +14,8 @@ hbs.registerHelper('checkRole', (user, role, options) => {
 hbs.registerHelper('json', function (context) {
   return JSON.stringify(context);
 });
+
+hbs.registerHelper('ifeq', function (a, b, options) {
+    if (a == b) { return options.fn(this); }
+    return options.inverse(this);
+});

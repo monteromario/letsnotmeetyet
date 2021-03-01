@@ -4,7 +4,11 @@ const passport = require('passport')
 
 
 module.exports.profile = (req, res, next) => {
-   res.render("user/profile",);
+   res.render("user/profile");
+};
+
+module.exports.editProfile = (req, res, next) => {
+   res.render("user/edit");
 };
 
 module.exports.login = (req, res, next) => {

@@ -9,6 +9,12 @@
                 <li class="nav-item">
                     <a id="lnkPictures" class="nav-link text-dark" href="#">Pictures</a>
                 </li>
+                <li class="nav-item">
+                    <a id="lnkLocation" class="nav-link text-dark" href="#">Location</a>
+                </li>
+                <li class="nav-item">
+                    <a id="lnkComments" class="nav-link text-dark" href="#">Comments</a>
+                </li>
             </ul>
         </div>
         <div id="divAbout">
@@ -24,10 +30,6 @@
                 <li class="list-group-item">{{gender}}</li>
                 <li class="list-group-item">Interested in: {{preferences}}</li>
             </ul>
-            <div class="card-body">
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-            </div>
         </div>
         <div id="divPictures" hidden>
             {{#each profilePictures}}
@@ -35,12 +37,15 @@
                 alt="{{username}}">
             {{/each}}
         </div>
+        <div id="divLocation" hidden>
+            {{location}}
+        </div>
+        <div id="divComments" hidden>
+            Comments
+        </div>
     </div>
 </div>
 {{/each}}
-
-{{users}}
-
 
 
 <script src="../js/script.js"></script>
