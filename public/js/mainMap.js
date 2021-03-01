@@ -10,9 +10,21 @@ function initMap() {
   });
 
   const markers = userLocations.map((user) => {
+    let icon = {
+      url: user.userPicture, // url
+      scaledSize: new google.maps.Size(50, 50), // scaled size
+    };
+
+    let shape = {
+      coords: [25, 25, 25],
+      type: 'circle'
+    };
+
     return new google.maps.Marker({
       position: { lat: user.coordinates[1], lng: user.coordinates[0] },
       label: user.username,
+      icon: icon,
+      shape: shape,
       map: map
     });
   });
