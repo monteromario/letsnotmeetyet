@@ -7,7 +7,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="/">
-            <small><i class="fas fa-virus text-muted"></i></small> LET'S NOT
+            <small><i class="fas fa-virus text-muted blink-image"></i></small> LET'S NOT
             MEET YET
         </a>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
@@ -18,9 +18,6 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="/map">Map</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
                 </li>
                 {{else}}
                 <li class="nav-item">
@@ -35,15 +32,16 @@
             <span class="text-muted p-2"><small>Logged in as: </small></span>
             <a href="/profile"
                 class="text-light">{{currentUser.username}}</a>
-            <small><a href="/logout" class="p-2 text-muted">(Logout)</a></small>
-            {{/if}}
+            <small class="logoutLink"><a href="/logout" class="p-2 text-muted">(Logout)</a></small>
             <form class="d-flex" action="/search">
                 <input class="form-control me-2" type="search"
                     placeholder="Search users"
                     aria-label="Search"
-                    name="username">
+                    name="username"
+                    value="{{search}}">
                 <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
+            {{/if}}
         </div>
     </div>
   </div>

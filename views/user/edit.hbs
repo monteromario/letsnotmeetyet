@@ -1,0 +1,146 @@
+<div class="container">
+    <div class="py-5">
+        <h3>Edit your profile</h3>
+        {{currentUser}}
+    </div>
+    <form class="pb-5" action="/register" method="POST"
+        enctype="multipart/form-data">
+        <div class="row mb-3">
+            <label for="inputUsername" class="col-sm-2 col-form-label">User name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputUsername"
+                    name="username" value="{{currentUser.username}}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputEmail"
+                    name="email" value="{{currentUser.email}}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="inputFirstName" class="col-sm-2 col-form-label">First
+                name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputFirstName"
+                    name="firstName" value="{{currentUser.firstName}}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="inputLastName" class="col-sm-2 col-form-label">Last name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputLastName"
+                    name="lastName" value="{{currentUser.lastName}}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="inputPassword" class="col-sm-2 col-form-label">New password</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="inputPassword"
+                    name="password" placeholder="Leave blank to not modify old password">
+            </div>
+        </div>
+        <fieldset class="row mb-3">
+            <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender"
+                        id="radio1" value="Male" {{#ifeq
+                        currentUser.preferences "Male"}}checked{{/ifeq}}>
+                    <label class="form-check-label" for="radio1">
+                        Male
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender"
+                        id="radio2" value="Female" {{#ifeq
+                        currentUser.preferences "Female"}}checked{{/ifeq}}>
+                    <label class="form-check-label" for="radio2">
+                        Female
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender"
+                        id="radio3" value="Other" {{#ifeq
+                        currentUser.preferences "Other"}}checked{{/ifeq}}>
+                    <label class="form-check-label" for="radio3">
+                        Other
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+        <div class="row mb-3">
+            <label for="inputAboutMe" class="col-sm-2 col-form-label">About you</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputAboutMe"
+                    name="aboutMe" value="{{currentUser.aboutMe}}">
+            </div>
+        </div>
+        <fieldset class="row mb-3">
+            <legend class="col-form-label col-sm-2 pt-0">Interested in</legend>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio"
+                        name="preferences" id="radio4" value="Male" {{#ifeq
+                        currentUser.preferences "Male"}}checked{{/ifeq}}>
+                    <label class="form-check-label" for="radio1">
+                        Boys
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio"
+                        name="preferences" id="radio5" value="Female" {{#ifeq
+                        currentUser.preferences "Female"}}checked{{/ifeq}}>
+                    <label class="form-check-label" for="radio2">
+                        Girls
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio"
+                        name="preferences" id="radio6" value="All" {{#ifeq
+                        currentUser.preferences "All"}}checked{{/ifeq}}>
+                    <label class="form-check-label" for="radio3">
+                        All
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+        <div class="row mb-3">
+            <label for="inputPictures" class="col-sm-2 col-form-label">Pictures</label>
+            <div class="col-sm-10">
+                <div class="mb-2">{{#each currentUser.profilePictures}}<img src="{{this}}" style="height: 100px;">{{/each}}</div>
+                <input type="file" class="form-control" id="inputPictures"
+                    name="profilePictures" multiple>
+            </div>
+        </div>
+        {{!-- d-none --}}
+        <div class="row mb-3">
+            <label for="inputLocation" class="col-sm-2 col-form-label">Location</label>
+            <div class="mb-3">
+                <input type="string" name="lat"
+                    value="{{currentUser.location.coordinates.[0]}}"
+                    class="form-control" id="lat" required>
+                <input type="string" name="lng"
+                    value="{{currentUser.location.coordinates.[1]}}"
+                    class="form-control" id="lng" required>
+            </div>
+            <div id="map" class="row mb-3"></div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-dark
+                btn-outline-light
+                border-dark mb-5 mx-2">Save</button>
+            <a href="/profile"><button type="button" class="btn btn-dark
+                    btn-outline-light
+                    border-dark mb-5 mx-2">Discard changes</button></a>
+        </div>
+    </form>
+</div>
+
+
+<script src="/js/map.js"></script>
+
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key={{mapsKey}}&callback=initMap">
+</script>
