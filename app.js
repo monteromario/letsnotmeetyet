@@ -48,7 +48,7 @@ app.use((error, req, res, next) => {
     error = createError(500);
   }
   res.status(error.status);
-  res.render("error", error);
+  res.render("error", {error} );
 });
 
 // Initialization on port
