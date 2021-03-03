@@ -1,65 +1,64 @@
 <div class="container">
-    <div class="d-flex mx-3">
-        <div class="col w-100">
-            <h3 class="pt-3">Your profile</h3>
-        </div>
-        <div class="flex-shrink-1">
-            <a href="profile/edit"><h4><button class="btn btn-dark
+  <div class="d-flex mx-3">
+    <div class="col w-100">
+      <h3 class="pt-3">Your profile</h3>
+    </div>
+    <div class="flex-shrink-1">
+      <a href="profile/edit">
+        <h4><button class="btn btn-dark
                         btn-outline-light
                         border-dark mt-3">Edit
-                        <i class="far fa-edit"></i></button></h4></a>
-        </div>
+            <i class="far fa-edit"></i></button></h4>
+      </a>
     </div>
-    <div class="container pt-3 pb-5 mb-5">
-        <div class="card text-center">
-            <div class="card-header">
-                <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                        <a id="lnkAbout" class="nav-link text-dark active"
-                            href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a id="lnkPictures" class="nav-link text-dark" href="#">Pictures</a>
-                    </li>
-                    <li class="nav-item">
-                        <a id="lnkLocation" class="nav-link text-dark" href="#">Location</a>
-                    </li>
-                    <li class="nav-item">
-                        <a id="lnkComments" class="nav-link text-dark" href="#">Comments</a>
-                    </li>
-                </ul>
-            </div>
-            <div id="divAbout">
-                <img class="img w-50 pt-2" src="{{#each
+  </div>
+  <div class="container pt-3 pb-5 mb-5">
+    <div class="card text-center">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a id="lnkAbout" class="nav-link text-dark active" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a id="lnkPictures" class="nav-link text-dark" href="#">Pictures</a>
+          </li>
+          <li class="nav-item">
+            <a id="lnkLocation" class="nav-link text-dark" href="#">Location</a>
+          </li>
+          <li class="nav-item">
+            <a id="lnkComments" class="nav-link text-dark" href="#">Comments</a>
+          </li>
+        </ul>
+      </div>
+      <div id="divAbout">
+        <img class="img w-50 pt-2" src="{{#each
                     currentUser.profilePictures}}{{#if
-                    @first}}{{this}}{{/if}}{{/each}}"
-                    alt="{{currentUser.username}}">
-                <div class="card-body">
-                    <h5 class="card-title">{{currentUser.username}}</h5>
-                    <p class="card-text">{{currentUser.aboutMe}}</p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">{{currentUser.firstName}}
-                        {{currentUser.lastName}}</li>
-                    <li class="list-group-item">{{currentUser.gender}}</li>
-                    <li class="list-group-item">Interested in:
-                        {{currentUser.preferences}}</li>
-                </ul>
-            </div>
-            <div id="divPictures" hidden>
-                {{#each currentUser.profilePictures}}
-                <img class="img-fluid p-5" src="{{this}}"
-                    alt="{{currentUser.username}}">
-                {{/each}}
-            </div>
-            <div id="divLocation" hidden>
-                {{currentUser.location}}
-            </div>
-            <div id="divComments" hidden>
-                Comments
-            </div>
+                    @first}}{{this}}{{/if}}{{/each}}" alt="{{currentUser.username}}">
+        <div class="card-body">
+          <h5 class="card-title">{{currentUser.username}}</h5>
+          <p class="card-text">{{currentUser.aboutMe}}</p>
         </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">{{currentUser.firstName}}
+            {{currentUser.lastName}}</li>
+          <li class="list-group-item">{{currentUser.gender}}</li>
+          <li class="list-group-item">Interested in:
+            {{currentUser.preferences}}</li>
+        </ul>
+      </div>
+      <div id="divPictures" hidden>
+        {{#each currentUser.profilePictures}}
+        <img class="img-fluid p-5" src="{{this}}" alt="{{currentUser.username}}">
+        {{/each}}
+      </div>
+      <div id="divLocation" hidden>
+        {{currentUser.location}}
+      </div>
+      <div id="divComments" hidden>
+        Comments
+      </div>
     </div>
+  </div>
 </div>
 
 

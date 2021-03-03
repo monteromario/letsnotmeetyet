@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const EMAIL_PATTERN = /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const PASSWORD_PATTERN = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
 const SALT_ROUNDS = 10;
-//const Like = require("./Like.model");
+const Like = require("./Match.model");
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -90,6 +90,12 @@ const userSchema = new mongoose.Schema({
       );
     },
   },
+  liked: {
+    type: [String]
+  },
+  matches: {
+    type: [String]
+  }
 });
 
 userSchema.methods.checkPassword = function (passwordToCheck) {

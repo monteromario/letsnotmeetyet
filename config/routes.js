@@ -27,10 +27,10 @@ router.get("/map", usersController.renderMap)
 router.get("/login", secure.isNotAuthenticated, usersController.login);
 router.post("/login", secure.isNotAuthenticated, usersController.doLogin);
 router.get(
-    "/activate/:token",
-    //secure.isNotAuthenticated,
-    usersController.activate
-    );
+  "/activate/:token",
+  //secure.isNotAuthenticated,
+  usersController.activate
+);
 // router.get('/authenticate/google', passport.authenticate('google-auth', { scope: GOOGLE_SCOPES }))
 // router.get('/authenticate/google/cb', usersController.doLoginGoogle)
 router.get("/logout", secure.isAuthenticated, usersController.logout);
@@ -69,9 +69,9 @@ router.get("/user/:username", usersController.view);
 //   productsController.delete
 // );
 
-// // Likes
+// Likes
 // router.get(
-//   "/product/:productId/like",
+//   "/user/:userId/like",
 //   secure.isAuthenticated,
 //   miscController.like
 // );

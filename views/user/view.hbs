@@ -1,49 +1,52 @@
 {{#each users}}
 <div class="container pt-3 pb-4 mb-5">
-    <div class="card text-center">
-        <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                    <a id="lnkAbout" class="nav-link text-dark active" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a id="lnkPictures" class="nav-link text-dark" href="#">Pictures</a>
-                </li>
-                <li class="nav-item">
-                    <a id="lnkLocation" class="nav-link text-dark" href="#">Location</a>
-                </li>
-                <li class="nav-item">
-                    <a id="lnkComments" class="nav-link text-dark" href="#">Comments</a>
-                </li>
-            </ul>
-        </div>
-        <div id="divAbout">
-            <img class="img w-50 pt-2" src="{{#each
-                profilePictures}}{{#if @first}}{{this}}{{/if}}{{/each}}"
-                alt="{{username}}">
-            <div class="card-body">
-                <h5 class="card-title">{{username}}</h5>
-                <p class="card-text">{{aboutMe}}</p>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">{{firstName}} {{lastName}}</li>
-                <li class="list-group-item">{{gender}}</li>
-                <li class="list-group-item">Interested in: {{preferences}}</li>
-            </ul>
-        </div>
-        <div id="divPictures" hidden>
-            {{#each profilePictures}}
-            <img class="img-fluid p-5" src="{{this}}"
-                alt="{{username}}">
-            {{/each}}
-        </div>
-        <div id="divLocation" hidden>
-            {{location}}
-        </div>
-        <div id="divComments" hidden>
-            Comments
-        </div>
+  <div class="card text-center">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a id="lnkAbout" class="nav-link text-dark active" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a id="lnkPictures" class="nav-link text-dark" href="#">Pictures</a>
+        </li>
+        <li class="nav-item">
+          <a id="lnkLocation" class="nav-link text-dark" href="#">Location</a>
+        </li>
+        <li class="nav-item">
+          <a id="lnkComments" class="nav-link text-dark" href="#">Comments</a>
+        </li>
+      </ul>
     </div>
+    <div id="divAbout">
+      <img class="img w-50 pt-2" src="{{#each
+                profilePictures}}{{#if @first}}{{this}}{{/if}}{{/each}}" alt="{{username}}">
+      <div class="card-body">
+        <h5 class="card-title">{{username}}</h5>
+        <p class="card-text">{{aboutMe}}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{firstName}} {{lastName}}</li>
+        <li class="list-group-item">{{gender}}</li>
+        <li class="list-group-item">Interested in: {{preferences}}</li>
+        <li class="list-group-item">
+          <button onclick="like(this)" {{#if disabled}}disabled{{/if}} data-user_id="{{_id}}"
+            class="btn btn-outline-danger likes {{#unless likedByUser}}unliked{{/unless}}"><i class="fa fa-heart"
+              aria-hidden="true"></i><span>{{0}}</span></button>
+        </li>
+      </ul>
+    </div>
+    <div id="divPictures" hidden>
+      {{#each profilePictures}}
+      <img class="img-fluid p-5" src="{{this}}" alt="{{username}}">
+      {{/each}}
+    </div>
+    <div id="divLocation" hidden>
+      {{location}}
+    </div>
+    <div id="divComments" hidden>
+      Comments
+    </div>
+  </div>
 </div>
 {{/each}}
 
