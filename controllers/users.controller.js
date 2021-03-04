@@ -1,14 +1,14 @@
 const User = require("../models/User.model");
+const Match = require("../models/Match.model");
 const { sendActivationEmail } = require("../config/mailer");
-const passport = require('passport')
-
+const passport = require("passport");
 
 module.exports.profile = (req, res, next) => {
-   res.render("user/profile");
+  res.render("user/profile");
 };
 
 module.exports.editProfile = (req, res, next) => {
-   res.render("user/edit");
+  res.render("user/edit");
 };
 
 module.exports.login = (req, res, next) => {
@@ -21,55 +21,63 @@ module.exports.register = (req, res, next) => {
 
 module.exports.renderMap = (req, res, next) => {
   User.find()
-    .then(users => {
-      const userLocations = users.map(user => {
-        let { username, location: { coordinates }, profilePictures } = user
-        userPicture = profilePictures[0]
-        return { username, coordinates, userPicture }
-      })
-      console.log(userLocations)
-      res.render("map", { userLocations })
+    .then((users) => {
+      const userLocations = users.map((user) => {
+        let {
+          username,
+          location: { coordinates },
+          profilePictures,
+        } = user;
+        userPicture = profilePictures[0];
+        return { username, coordinates, userPicture };
+      });
+      console.log(userLocations);
+      res.render("map", { userLocations });
     })
-    .catch(e => console.log(e))
+    .catch((e) => console.log(e));
 };
 
 module.exports.doRegister = (req, res, next) => {
   req.body.location = {
-    type: 'Point',
-    coordinates: [Number(req.body.lng), Number(req.body.lat)]
+    type: "Point",
+    coordinates: [Number(req.body.lng), Number(req.body.lat)],
   };
 
   if (req.files.length > 0) {
-    req.body.profilePictures = req.files.map(file => file.path);
+    req.body.profilePictures = req.files.map((file) => file.path);
   }
   User.create(req.body)
     .then((u) => {
       sendActivationEmail(u.email, u.firstName, u.activationToken);
-      res.render("login", { succesMessage: "Register finished. Check you email to validate your account." });
+      res.render("login", {
+        succesMessage:
+          "Register finished. Check you email to validate your account.",
+      });
     })
-    .catch(e => console.log('error creating user: ', e));
-}
+    .catch((e) => console.log("error creating user: ", e));
+};
 
 module.exports.doLogin = (req, res, next) => {
-  passport.authenticate('local-auth', (error, user, validations) => {
+  passport.authenticate("local-auth", (error, user, validations) => {
     if (error) {
       next(error);
     } else if (!user) {
-      res.status(400).render('login', { user: req.body, errorMessage: validations.error });
+      res
+        .status(400)
+        .render("login", { user: req.body, errorMessage: validations.error });
     } else {
-      req.login(user, loginErr => {
-        if (loginErr) next(loginErr)
-        else res.redirect('/')
-      })
+      req.login(user, (loginErr) => {
+        if (loginErr) next(loginErr);
+        else res.redirect("/");
+      });
     }
   })(req, res, next);
 };
 
 module.exports.view = (req, res, next) => {
-  User.find({ username: req.params.username })
-    .then(users => {
-      res.render('user/view', { users })
-    })
+  User.find({ username: req.params.username }).then((users) => {
+    res.render("user/view", { users });
+  });
 };
 
 module.exports.logout = (req, res, next) => {
@@ -90,6 +98,27 @@ module.exports.activate = (req, res, next) => {
         });
       } else {
         res.redirect("/");
+      }
+    })
+    .catch((e) => next(e));
+};
+
+module.exports.like = (req, res, next) => {
+  Match.findOne({ liker: req.currentUser._id, liked: req.params.productId })
+    .then((like) => {
+      if (!like) {
+        return Like.create({
+          product: req.params.productId,
+          user: req.currentUser._id,
+        }).then(() => {
+          // Dándole a like
+          res.json({ add: 1 });
+        });
+      } else {
+        return Like.findByIdAndDelete(like._id).then(() => {
+          // Dándole a dislike
+          res.json({ add: -1 });
+        });
       }
     })
     .catch((e) => next(e));

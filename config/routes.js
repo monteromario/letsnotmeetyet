@@ -1,12 +1,15 @@
-const passport = require('passport')
+const passport = require("passport");
 const router = require("express").Router();
 const miscController = require("../controllers/misc.controller");
 const usersController = require("../controllers/users.controller");
 //const productsController = require("../controllers/products.controller");
 const secure = require("../middlewares/secure.middleware");
-const upload = require('./storage.config')
+const upload = require("./storage.config");
 
-const GOOGLE_SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+const GOOGLE_SCOPES = [
+  "https://www.googleapis.com/auth/userinfo.email",
+  "https://www.googleapis.com/auth/userinfo.profile",
+];
 
 // Misc
 
@@ -20,9 +23,10 @@ router.post(
   "/register",
   secure.isNotAuthenticated,
   upload.any(),
-  usersController.doRegister);
+  usersController.doRegister
+);
 
-router.get("/map", usersController.renderMap)
+router.get("/map", usersController.renderMap);
 
 router.get("/login", secure.isNotAuthenticated, usersController.login);
 router.post("/login", secure.isNotAuthenticated, usersController.doLogin);
@@ -35,7 +39,11 @@ router.get(
 // router.get('/authenticate/google/cb', usersController.doLoginGoogle)
 router.get("/logout", secure.isAuthenticated, usersController.logout);
 router.get("/profile", secure.isAuthenticated, usersController.profile);
-router.get("/profile/edit", secure.isAuthenticated, usersController.editProfile);
+router.get(
+  "/profile/edit",
+  secure.isAuthenticated,
+  usersController.editProfile
+);
 // router.get("/wishlist", secure.isAuthenticated, usersController.wishlist);
 // router.get("/users", secure.checkRole('ADMIN'), usersController.list);
 
@@ -69,11 +77,7 @@ router.get("/user/:username", usersController.view);
 //   productsController.delete
 // );
 
-// Likes
-// router.get(
-//   "/user/:userId/like",
-//   secure.isAuthenticated,
-//   miscController.like
-// );
+//Likes;
+router.get("/user/:userId/like", secure.isAuthenticated, usersController.like);
 
 module.exports = router;

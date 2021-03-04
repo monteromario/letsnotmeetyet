@@ -3,16 +3,16 @@ const User = require("./User.model");
 
 const likeSchema = new mongoose.Schema(
   {
-    user1: {
+    liker: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
       required: true,
     },
-    user2: {
+    liked: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
       required: true,
-    }
+    },
   },
   {
     timestamps: true,
