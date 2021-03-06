@@ -45,6 +45,11 @@ img {
     max-height: 450px;
 }
 
+.img-thumbnail {
+    max-width: 106px;
+    max-height: 106px;
+}
+
 a {
     text-decoration: none;
 }
@@ -105,6 +110,12 @@ a {
 
 .link-top:hover {
     color: #000000;
+}
+
+.userLink {
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
 }
 
 .d-none {
