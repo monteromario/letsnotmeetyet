@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -e hbs,css,js app.js",
+    "dev": "nodemon -L -e hbs,css,js app.js",
     "seeds": "node bin/seeds.js"
   },
   "author": "",

@@ -1,13 +1,14 @@
-const passport = require('passport')
+const passport = require("passport");
 const router = require("express").Router();
 const miscController = require("../controllers/misc.controller");
 const usersController = require("../controllers/users.controller");
 //const productsController = require("../controllers/products.controller");
 const secure = require("../middlewares/secure.middleware");
-const upload = require('./storage.config')
+const upload = require("./storage.config");
 
 const GOOGLE_SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
 const FACEBOOK_SCOPES = ['public_profile', 'email'] 
+
 
 // Misc
 
@@ -21,17 +22,14 @@ router.post(
   "/register",
   secure.isNotAuthenticated,
   upload.any(),
-  usersController.doRegister);
+  usersController.doRegister
+);
 
-router.get("/map", usersController.renderMap)
+router.get("/map", usersController.renderMap);
 
 router.get("/login", secure.isNotAuthenticated, usersController.login);
 router.post("/login", secure.isNotAuthenticated, usersController.doLogin);
-router.get(
-    "/activate/:token",
-    //secure.isNotAuthenticated,
-    usersController.activate
-    );
+router.get("/activate/:token",secure.isNotAuthenticated, usersController.activate);
 router.get('/authenticate/google', passport.authenticate('google-auth', { scope: GOOGLE_SCOPES }))
 router.get('/authenticate/google/callback', usersController.doLoginGoogle)
 router.get('/authenticate/facebook', passport.authenticate('facebook-auth', { scope: FACEBOOK_SCOPES }))
@@ -41,6 +39,7 @@ router.get("/profile", secure.isAuthenticated, usersController.profile);
 router.get("/profile/edit", secure.isAuthenticated, usersController.editProfile);
 router.post("/profile/edit", secure.isAuthenticated, usersController.doEditProfile)
 router.get("/profile/delete", secure.isAuthenticated, usersController.deleteProfile);
+
 // router.get("/wishlist", secure.isAuthenticated, usersController.wishlist);
 // router.get("/users", secure.checkRole('ADMIN'), usersController.list);
 
@@ -74,13 +73,9 @@ router.get("/user/:username", secure.isAuthenticated, usersController.view);
 //   productsController.delete
 // );
 
-// // Likes
-// router.get(
-//   "/product/:productId/like",
-//   secure.isAuthenticated,
-//   miscController.like
-// );
-
+//Likes;
+router.get("/user/:userId/like", usersController.like);
+//router.get("/user/:userId/like", secure.isAuthenticated, usersController.like);
 router.post("/user/:username/addComment", secure.isAuthenticated, usersController.addComment)
 router.get("/user/:username/deleteComment/:id", secure.isAuthenticated, usersController.deleteComment)
 
