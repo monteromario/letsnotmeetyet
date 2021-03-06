@@ -113,7 +113,7 @@ module.exports.like = (req, res, next) => {
   )
     .then(user => {
       let likedUSer = ""
-      User.findById(req.params.userId).then(user => likedUSer = userPicture)
+      User.findById(req.params.userId).then(user => likedUSer = user)
       if (user.length === 0) {
         console.log('LIKE')
         User.findByIdAndUpdate(req.currentUser._id,
@@ -127,14 +127,7 @@ module.exports.like = (req, res, next) => {
           .then(user => console.log(`Removed ${req.params.userId} : ${likedUSer.username} from liked`))
           .catch(e => console.log(e))
       }
-      res.render("user/view", { likedUSer })
-      //console.log(user)
-      // if (user.liked.includes(req.params.userId)) {
-      //   console.log('UNLIKE:', req.params.userId)
-      //   user.liked = user.liked.filter(userId => userId != req.params.userId);
-      // } else {
-      //   console.log('LIKE', req.params.userId);
-      // }
+      res.redirect(`/user/${likedUSer.username}`)
     })
     .catch(e => console.log(e));
 };

@@ -46,7 +46,7 @@ const like = (element) => {
   axios
     .get(`/user/${element.getAttribute("data-user_id")}/like`)
     .then((response) => {
-      console.log(response)
+      //console.log(response)
 
     })
     .catch((e) => console.error("Error liking product", e));
