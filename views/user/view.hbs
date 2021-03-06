@@ -1,21 +1,151 @@
 {{#each users}}
 <div class="container pt-3 pb-4 mb-5">
-  <div class="card text-center">
-    <div class="card-header">
-      <ul class="nav nav-tabs card-header-tabs">
-        <li class="nav-item">
-          <a id="lnkAbout" class="nav-link text-dark active" href="#">About</a>
-        </li>
-        <li class="nav-item">
-          <a id="lnkPictures" class="nav-link text-dark" href="#">Pictures</a>
-        </li>
-        <li class="nav-item">
-          <a id="lnkLocation" class="nav-link text-dark" href="#">Location</a>
-        </li>
-        <li class="nav-item">
-          <a id="lnkComments" class="nav-link text-dark" href="#">Comments</a>
-        </li>
-      </ul>
+    {{#ifeq username ../currentUser.username}}
+    <div class="m-3 text-center"><i class="fas fa-info-circle"></i> Your're viewing your <strong>public</strong> profile. <a href="/profile" class="userLink">Click here to view your private profile.</a></div>
+    {{/ifeq}}    
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a id="lnkAbout" class="nav-link text-dark active" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a id="lnkPictures" class="nav-link text-dark" href="#">Pictures</a>
+                </li>
+                <li class="nav-item">
+                    <a id="lnkLocation" class="nav-link text-dark" href="#">Location</a>
+                </li>
+                <li class="nav-item">
+                    <a id="lnkComments" class="nav-link text-dark" href="#">Comments</a>
+                </li>
+            </ul>
+        </div>
+        <div id="divAbout" class="text-center">
+            <img class="img w-50 pt-2" src="{{#each
+                profilePictures}}{{#if @first}}{{this}}{{/if}}{{/each}}"
+                alt="{{username}}">
+            <div class="card-body">
+                <h5 class="card-title">{{username}}</h5>
+                <p class="card-text">{{aboutMe}}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{firstName}} {{lastName}}</li>
+                <li class="list-group-item">{{gender}}</li>
+                <li class="list-group-item">Interested in: {{preferences}}</li>
+            </ul>
+        </div>
+        <div id="divPictures" class="text-center" hidden>
+            {{#each profilePictures}}
+            <img class="img-fluid p-5" src="{{this}}"
+                alt="{{username}}">
+            {{/each}}
+        </div>
+        <div id="divLocation" class="text-center" hidden>
+            {{location}}
+        </div>
+        <div id="divComments" hidden>
+        {{#if comments}}
+            {{#each comments}}
+            {{#unless private}}
+            {{#if author.[0]}}
+            <div class="m-5 text-left">
+                <div class="toast-header">
+                    <div class="col d-flex">
+                        <img class="img-thumbnail" src="{{author.[0].profilePictures.[0]}}">
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <span>By: <strong class="me-auto mx-2"> <a href="/user/{{author.[0].username}}" class="userLink">{{author.[0].username}}</a></strong></span>
+                        </div>
+                        <div class="row">
+                            <span>On: <small>{{createdAt}}</small></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="toast-body d-flex p-3 text-left">
+                {{text}}
+                </div>
+                <div class="toast-body d-flex p-2">
+                {{#ifeq profile ../../currentUser._id}}
+                    <button type="button" class="btn btn-danger btn-sm
+                        btn-outline-light
+                        border-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal{{@index}}"> 
+                        <i class="far fa-trash-alt"></i> Delete comment</button>
+                        <div class="modal fade" id="confirmationModal{{@index}}" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmationModalLabel">Are you sure?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{../../currentUser.firstName}}, are you sure you want to delete the comment? This action can't be reverted.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a href="/user/{{../username}}/deleteComment/{{_id}}"><button type="button" class="btn btn-danger">Confirm delete</button></a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                {{else}}
+                    {{#ifeq author.[0]._id ../../currentUser._id}}
+                    <button type="button" class="btn btn-danger btn-sm
+                        btn-outline-light
+                        border-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal{{@index}}">
+                        <i class="far fa-trash-alt"></i> Delete comment
+                    </button>
+                    <div class="modal fade" id="confirmationModal{{@index}}" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmationModalLabel">Are you sure?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{../../currentUser.firstName}}, are you sure you want to delete the comment? This action can't be reverted.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a href="/user/{{../username}}/deleteComment/{{_id}}"><button type="button" class="btn btn-danger">Confirm delete</button></a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{else}}
+                    {{/ifeq}}
+                {{/ifeq}}
+                </div>
+            </div>
+            {{else}}
+            {{/if}}
+            {{/unless}}
+            {{/each}}
+            {{else}}
+            <div class="m-5 text-center">{{firstName}} has no comments yet. Leave your message!</div>
+        {{/if}}
+            {{#ifeq username ../currentUser.username}}
+            {{else}}
+            <form class="m-5" action="{{username}}/addComment" method="POST">
+                <div class="mb-3">
+                    <label for="text" class="form-label">New comment</label>
+                    <textarea rows="5" class="form-control" aria-describedby="text" name="text" required></textarea>
+                    <div class="form-text">Write on {{firstName}}'s wall.</div>
+                </div>
+                <div class="mb-3 form-check d-flex justify-content-center">
+                    <div>
+                        <input type="checkbox" class="form-check-input" id="private" name="private">
+                        <label class="form-check-label mx-2" for="exampleCheck1">Private (only you and {{firstName}} will see it).</label>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control" name="user" value="{{../currentUser._id}}" hidden>
+                        <input type="text" class="form-control" name="profile" value="{{_id}}" hidden>
+                        <button type="submit" class="btn btn-dark mx-3">Post message</button>
+                    </div>
+                </div>
+            </form>
+            {{/ifeq}}
+        </div>
     </div>
     <div id="divAbout">
       <img class="img w-50 pt-2" src="{{#each

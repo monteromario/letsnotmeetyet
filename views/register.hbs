@@ -1,43 +1,48 @@
 <div class="container">
-  <div class="text-center py-5">
+  <div class="text-center pt-5">
     <h3>Join <strong>Let's N<i class="fas fa-virus"></i>t Meet Yet</strong> community</h3>
   </div>
+  {{#if errorMessage}}
+        <div class="alert alert-danger m-5" role="alert">
+            {{errorMessage}}
+        </div>
+        {{/if}}
   <form class="pb-5" action="/register" method="POST" enctype="multipart/form-data">
     <div class="row mb-3">
       <label for="inputUsername" class="col-sm-2 col-form-label">User name</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="inputUsername" name="username">
+        <input type="text" class="form-control" id="inputUsername" name="username" required>
       </div>
     </div>
     <div class="row mb-3">
       <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
       <div class="col-sm-10">
-        <input type="email" class="form-control" id="inputEmail" name="email">
+        <input type="email" class="form-control" id="inputEmail" name="email" required>
       </div>
     </div>
     <div class="row mb-3">
       <label for="inputFirstName" class="col-sm-2 col-form-label">First name</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="inputFirstName" name="firstName">
+        <input type="text" class="form-control" id="inputFirstName" name="firstName" required>
       </div>
     </div>
     <div class="row mb-3">
       <label for="inputLastName" class="col-sm-2 col-form-label">Last name</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="inputLastName" name="lastName">
+        <input type="text" class="form-control" id="inputLastName" name="lastName" required>
       </div>
     </div>
     <div class="row mb-3">
       <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
       <div class="col-sm-10">
-        <input type="password" class="form-control" id="inputPassword" name="password">
+        <input type="password" class="form-control" id="inputPassword" name="password" required>
       </div>
     </div>
     <fieldset class="row mb-3">
       <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
       <div class="col-sm-10">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="gender" id="radio1" value="Male">
+          <input class="form-check-input" type="radio" name="gender" id="radio1" value="Male" required>
           <label class="form-check-label" for="radio1">
             Male
           </label>
@@ -66,7 +71,7 @@
       <legend class="col-form-label col-sm-2 pt-0">Interested in</legend>
       <div class="col-sm-10">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="preferences" id="radio4" value="Male">
+          <input class="form-check-input" type="radio" name="preferences" id="radio4" value="Male" required>
           <label class="form-check-label" for="radio1">
             Boys
           </label>
@@ -94,14 +99,16 @@
     {{!-- d-none --}}
     <div class="row mb-3">
       <label for="inputLocation" class="col-sm-2 col-form-label">Location</label>
-      <div class="mb-3">
-        <input type="string" name="lat" value="{{lat}}" class="form-control" id="lat" required>
-        <input type="string" name="lng" value="{{lng}}" class="form-control" id="lng" required>
       </div>
-      <div id="map" class="row mb-3"></div>
-    </div>
-    <div class="text-center">
-      <button type="submit" class="btn btn-dark text-center ml-5 mb-5">Sign in</button>
+      <div class="mb-3">
+        <div id="map" class="row mx-1 mb-3"></div>
+        <div class="d-flex justify-content-center">
+          <input type="string" name="lat" value="{{lat}}" class="form-control w-25 mx-2" id="lat" disabled required>
+          <input type="string" name="lng" value="{{lng}}" class="form-control w-25 mx-2" id="lng" disabled required>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-dark text-center ml-5 mb-5">Sign in</button>
     </div>
   </form>
 </div>

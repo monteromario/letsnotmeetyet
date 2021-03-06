@@ -6,10 +6,9 @@ const usersController = require("../controllers/users.controller");
 const secure = require("../middlewares/secure.middleware");
 const upload = require("./storage.config");
 
-const GOOGLE_SCOPES = [
-  "https://www.googleapis.com/auth/userinfo.email",
-  "https://www.googleapis.com/auth/userinfo.profile",
-];
+const GOOGLE_SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+const FACEBOOK_SCOPES = ['public_profile', 'email'] 
+
 
 // Misc
 
@@ -30,20 +29,17 @@ router.get("/map", usersController.renderMap);
 
 router.get("/login", secure.isNotAuthenticated, usersController.login);
 router.post("/login", secure.isNotAuthenticated, usersController.doLogin);
-router.get(
-  "/activate/:token",
-  //secure.isNotAuthenticated,
-  usersController.activate
-);
-// router.get('/authenticate/google', passport.authenticate('google-auth', { scope: GOOGLE_SCOPES }))
-// router.get('/authenticate/google/cb', usersController.doLoginGoogle)
+router.get("/activate/:token",secure.isNotAuthenticated, usersController.activate);
+router.get('/authenticate/google', passport.authenticate('google-auth', { scope: GOOGLE_SCOPES }))
+router.get('/authenticate/google/callback', usersController.doLoginGoogle)
+router.get('/authenticate/facebook', passport.authenticate('facebook-auth', { scope: FACEBOOK_SCOPES }))
+router.get('/authenticate/facebook/callback', usersController.doLoginFacebook)
 router.get("/logout", secure.isAuthenticated, usersController.logout);
 router.get("/profile", secure.isAuthenticated, usersController.profile);
-router.get(
-  "/profile/edit",
-  secure.isAuthenticated,
-  usersController.editProfile
-);
+router.get("/profile/edit", secure.isAuthenticated, usersController.editProfile);
+router.post("/profile/edit", secure.isAuthenticated, usersController.doEditProfile)
+router.get("/profile/delete", secure.isAuthenticated, usersController.deleteProfile);
+
 // router.get("/wishlist", secure.isAuthenticated, usersController.wishlist);
 // router.get("/users", secure.checkRole('ADMIN'), usersController.list);
 
@@ -59,7 +55,7 @@ router.get(
 //   upload.single("image"),
 //   productsController.doCreate
 // );
-router.get("/user/:username", usersController.view);
+router.get("/user/:username", secure.isAuthenticated, usersController.view);
 // router.get(
 //   "/products/:id/edit",
 //   secure.isAuthenticated,
@@ -80,5 +76,7 @@ router.get("/user/:username", usersController.view);
 //Likes;
 router.get("/user/:userId/like", usersController.like);
 //router.get("/user/:userId/like", secure.isAuthenticated, usersController.like);
+router.post("/user/:username/addComment", secure.isAuthenticated, usersController.addComment)
+router.get("/user/:username/deleteComment/:id", secure.isAuthenticated, usersController.deleteComment)
 
 module.exports = router;

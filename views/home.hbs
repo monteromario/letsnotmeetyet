@@ -7,6 +7,8 @@
         </div>
         {{/if}}
         {{#each users}}
+        {{#ifeq username ../currentUser.username}}
+        {{else}}
         <div class="col">
             <a href="/user/{{username}}" class="homeLink">
                 <div class="card h-100 homeLinkDiv">
@@ -20,6 +22,7 @@
                 </div>
             </a>
         </div>
+        {{/ifeq}}
         {{/each}}
     {{else}}
     <div class="text-center py-4">

@@ -1,42 +1,140 @@
 <div class="container">
-  <div class="d-flex mx-3">
-    <div class="col w-100">
-      <h3 class="pt-3">Your profile</h3>
-    </div>
-    <div class="flex-shrink-1">
-      <a href="profile/edit">
-        <h4><button class="btn btn-dark
+    <div class="d-flex mx-3">
+        <div class="col w-100">
+            <h3 class="pt-3">Your profile</h3>
+        </div>
+        <div class="flex-shrink-1 mx-2">
+            <a href="profile/edit"><button class="btn btn-dark
                         btn-outline-light
                         border-dark mt-3">Edit
-            <i class="far fa-edit"></i></button></h4>
-      </a>
+                        <i class="far fa-edit"></i></button>
+            </a>
+        </div>
+        <div class="flex-shrink-1">
+            <button type="button" class="btn btn-danger
+                        btn-outline-light
+                        border-danger mt-3" data-bs-toggle="modal" data-bs-target="#confirmationModal">Delete
+                        <i class="far fa-trash-alt"></i></button>
+        </div>
     </div>
-  </div>
-  <div class="container pt-3 pb-5 mb-5">
-    <div class="card text-center">
-      <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs">
-          <li class="nav-item">
-            <a id="lnkAbout" class="nav-link text-dark active" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a id="lnkPictures" class="nav-link text-dark" href="#">Pictures</a>
-          </li>
-          <li class="nav-item">
-            <a id="lnkLocation" class="nav-link text-dark" href="#">Location</a>
-          </li>
-          <li class="nav-item">
-            <a id="lnkComments" class="nav-link text-dark" href="#">Comments</a>
-          </li>
-        </ul>
-      </div>
-      <div id="divAbout">
-        <img class="img w-50 pt-2" src="{{#each
+    <div class="container pt-3 pb-5 mb-5">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a id="lnkAbout" class="nav-link text-dark active"
+                            href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="lnkPictures" class="nav-link text-dark" href="#">Pictures</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="lnkLocation" class="nav-link text-dark" href="#">Location</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="lnkComments" class="nav-link text-dark" href="#">Comments</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="divAbout" class="text-center">
+                <img class="img w-50 pt-2" src="{{#each
                     currentUser.profilePictures}}{{#if
-                    @first}}{{this}}{{/if}}{{/each}}" alt="{{currentUser.username}}">
-        <div class="card-body">
-          <h5 class="card-title">{{currentUser.username}}</h5>
-          <p class="card-text">{{currentUser.aboutMe}}</p>
+                    @first}}{{this}}{{/if}}{{/each}}"
+                    alt="{{currentUser.username}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{currentUser.username}}</h5>
+                    <p class="card-text">{{currentUser.aboutMe}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">{{currentUser.firstName}}
+                        {{currentUser.lastName}}</li>
+                    <li class="list-group-item">{{currentUser.gender}}</li>
+                    <li class="list-group-item">Interested in:
+                        {{currentUser.preferences}}</li>
+                </ul>
+            </div>
+            <div id="divPictures" class="text-center" hidden>
+                {{#each currentUser.profilePictures}}
+                <img class="img-fluid p-5" src="{{this}}"
+                    alt="{{currentUser.username}}">
+                {{/each}}
+            </div>
+            <div id="divLocation" class="text-center" hidden>
+                {{userLocations.location}}
+                <div id="map" class="row mx-3 my-5"></div>
+                    <script>
+                    let userLocations = {{{ json userLocations }}}
+                    </script>
+                    <script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
+                    <script src="/js/mainMap.js"></script>
+                    <script async src="https://maps.googleapis.com/maps/api/js?key={{mapsKey}}&callback=initMap">
+                    </script>
+            </div>
+            <div id="divComments" hidden>
+        {{#if user.[0].comments}}
+            {{#each user.[0].comments as | comment |}}
+            {{#if comment.private}}
+            <div class="m-3 text-left card bg-light">
+            {{else}}
+            <div class="m-3 text-left">
+            {{/if}}
+                <div class="toast-header">
+                    <div class="col d-flex">
+                        <img class="img-thumbnail" src="{{#if comment.author.[0]}}{{comment.author.[0].profilePictures.[0]}}{{else}}https://res.cloudinary.com/letsnotmeetyet/image/upload/v1614195193/letsnotmeetyet/pictures/unknown_user_ia1je9.png{{/if}}">
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <span>By: <strong class="me-auto mx-2"> {{#unless comment.author.[0]}} a user who left Let'sNotMeetYet{{/unless}}
+                                <a href="/user/{{comment.author.[0].username}}" class="userLink">{{comment.author.[0].username}}</a></strong></span>
+                        </div>
+                        <div class="row">
+                            <span>On: <small>{{comment.createdAt}}</small></span>
+                        </div>
+                        {{#if comment.private}}
+                        <div class="row">
+                            <span class="pt-1"><p class="badge bg-secondary"><i class="fas fa-eye-slash"></i> Private message!</p></span>
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="toast-body d-flex p-3 text-left">
+                {{comment.text}}
+                </div>
+                <div class="toast-body d-flex p-2">
+                    <button type="button" class="btn btn-danger btn-sm
+                        btn-outline-light
+                        border-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal{{@index}}"> 
+                        <i class="far fa-trash-alt"></i> Delete comment</button>
+                        <div class="modal fade" id="confirmationModal{{@index}}" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmationModalLabel">Are you sure?</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{../currentUser.firstName}}, are you sure you want to delete the comment? This action can't be reverted.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <a href="/user/{{../currentUser.username}}/deleteComment/{{_id}}"><button type="button" class="btn btn-danger">Confirm delete</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{#if comment.author.[0]}}
+                    <a href="/user/{{comment.author.[0].username}}"><button type="button" class="btn btn-dark btn-sm
+                        btn-outline-light
+                        border-dark mx-3"> 
+                        <i class="fas fa-reply"></i> Message back</button></a>
+                        {{/if}}
+                </div>
+            </div>
+            {{/each}}
+            {{else}}
+            <div class="m-5 text-center">Your profiles has no comments yet.</div>
+        {{/if}}
+        </div>
         </div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">{{currentUser.firstName}}
@@ -61,5 +159,22 @@
   </div>
 </div>
 
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">Are you sure?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{currentUser.firstName}}, are you sure you want to delete your profile? All your information will be deleted. This action can't be reverted.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a href="profile/delete"><button type="button" class="btn btn-danger">Confirm delete</button></a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="../js/script.js"></script>

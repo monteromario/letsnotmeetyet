@@ -3,8 +3,9 @@
         <h3>Edit your profile</h3>
         {{currentUser}}
     </div>
-    <form class="pb-5" action="/register" method="POST"
-        enctype="multipart/form-data">
+    <form class="pb-5" action="/profile/edit" method="POST"
+        {{!-- enctype="multipart/form-data" --}}
+        >
         <div class="row mb-3">
             <label for="inputUsername" class="col-sm-2 col-form-label">User name</label>
             <div class="col-sm-10">
@@ -34,20 +35,20 @@
                     name="lastName" value="{{currentUser.lastName}}">
             </div>
         </div>
-        <div class="row mb-3">
+        {{!-- <div class="row mb-3">
             <label for="inputPassword" class="col-sm-2 col-form-label">New password</label>
             <div class="col-sm-10">
                 <input type="password" class="form-control" id="inputPassword"
                     name="password" placeholder="Leave blank to not modify old password">
             </div>
-        </div>
+        </div> --}}
         <fieldset class="row mb-3">
             <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
             <div class="col-sm-10">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="gender"
                         id="radio1" value="Male" {{#ifeq
-                        currentUser.preferences "Male"}}checked{{/ifeq}}>
+                        currentUser.gender "Male"}}checked{{/ifeq}}>
                     <label class="form-check-label" for="radio1">
                         Male
                     </label>
@@ -55,7 +56,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="gender"
                         id="radio2" value="Female" {{#ifeq
-                        currentUser.preferences "Female"}}checked{{/ifeq}}>
+                        currentUser.gender "Female"}}checked{{/ifeq}}>
                     <label class="form-check-label" for="radio2">
                         Female
                     </label>
@@ -63,7 +64,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="gender"
                         id="radio3" value="Other" {{#ifeq
-                        currentUser.preferences "Other"}}checked{{/ifeq}}>
+                        currentUser.gender "Other"}}checked{{/ifeq}}>
                     <label class="form-check-label" for="radio3">
                         Other
                     </label>
@@ -106,31 +107,29 @@
                 </div>
             </div>
         </fieldset>
-        <div class="row mb-3">
+        {{!-- <div class="row mb-3">
             <label for="inputPictures" class="col-sm-2 col-form-label">Pictures</label>
             <div class="col-sm-10">
                 <div class="mb-2">{{#each currentUser.profilePictures}}<img src="{{this}}" style="height: 100px;">{{/each}}</div>
                 <input type="file" class="form-control" id="inputPictures"
                     name="profilePictures" multiple>
             </div>
-        </div>
+        </div> --}}
         {{!-- d-none --}}
         <div class="row mb-3">
             <label for="inputLocation" class="col-sm-2 col-form-label">Location</label>
-            <div class="mb-3">
-                <input type="string" name="lat"
-                    value="{{currentUser.location.coordinates.[0]}}"
-                    class="form-control" id="lat" required>
-                <input type="string" name="lng"
-                    value="{{currentUser.location.coordinates.[1]}}"
-                    class="form-control" id="lng" required>
+            <div id="map" class="row mx-3"></div>
+        </div>
+        <div class="mb-4">
+            <div class="d-flex justify-content-center">
+                <input type="text" name="lat" value="{{currentUser.location.coordinates.[0]}}" class="form-control w-25 mx-2" id="lat" readonly required>
+                <input type="text" name="lng" value="{{currentUser.location.coordinates.[1]}}" class="form-control w-25 mx-2" id="lng" readonly required>
             </div>
-            <div id="map" class="row mb-3"></div>
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-dark
                 btn-outline-light
-                border-dark mb-5 mx-2">Save</button>
+                border-dark mb-5 mx-2">Save profile</button>
             <a href="/profile"><button type="button" class="btn btn-dark
                     btn-outline-light
                     border-dark mb-5 mx-2">Discard changes</button></a>
