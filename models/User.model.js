@@ -97,15 +97,15 @@ const userSchema = new mongoose.Schema({
   },
   matches: {
     type: [String]
-  }
-});
+  },
 },
 {
     timestamps: true,
     toJSON: {
       virtuals: true,
     },
-  });
+  }
+);
 
 userSchema.methods.checkPassword = function (passwordToCheck) {
   return bcrypt.compare(passwordToCheck, this.password);
