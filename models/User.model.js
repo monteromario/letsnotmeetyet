@@ -4,6 +4,7 @@ const EMAIL_PATTERN = /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()[\]\\.,;:\s@']+)*)|('.+'
 const PASSWORD_PATTERN = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
 const SALT_ROUNDS = 10;
 //const Like = require("./Like.model");
+const Comment = require("./Comment.model")
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -77,7 +78,8 @@ const userSchema = new mongoose.Schema({
     default: 'USER'
   },
   social: {
-    google: String
+    google: String,
+    facebook: String
   },
   activationToken: {
     type: String,
@@ -90,7 +92,13 @@ const userSchema = new mongoose.Schema({
       );
     },
   },
-});
+},
+{
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
+  });
 
 userSchema.methods.checkPassword = function (passwordToCheck) {
   return bcrypt.compare(passwordToCheck, this.password);
@@ -119,6 +127,12 @@ userSchema.index({ location: '2dsphere' });
 // 	localField: '_id',
 // 	foreignField: 'user'
 // });
+
+userSchema.virtual('comments', {
+	ref: 'Comment',
+	localField: '_id',
+	foreignField: 'profile'
+});
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

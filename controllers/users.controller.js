@@ -1,14 +1,67 @@
 const User = require("../models/User.model");
+const Comment = require("../models/Comment.model");
 const { sendActivationEmail } = require("../config/mailer");
-const passport = require('passport')
+const passport = require('passport');
+const mongoose = require("mongoose");
+const flash = require('connect-flash');
 
 
 module.exports.profile = (req, res, next) => {
-   res.render("user/profile");
+   User.find({ username: res.locals.currentUser.username })
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'author'
+      }
+    })
+    .then(user => {
+      let userLocations = {
+        username: user[0].username, 
+        coordinates: user[0].location.coordinates, 
+        userPicture: user[0].profilePictures 
+      }
+      console.log(userLocations)
+      res.render('user/profile', { user, userLocations })
+    }
+    )
 };
 
 module.exports.editProfile = (req, res, next) => {
    res.render("user/edit");
+};
+
+module.exports.doEditProfile = (req, res, next) => {
+  req.body.location = {
+    type: 'Point', 
+    coordinates: [ req.body.lat, req.body.lng ]
+  }
+  console.log(req.body)
+  User.findOneAndUpdate({ username: req.body.username }, req.body, {
+    new: true
+  })
+    .then((u) => {
+      req.flash('flashMessage', `${u.firstName}, your profile has been updated.`);
+    res.redirect('/profile');
+})
+    .catch(e => {
+      console.log('error editing user: ', e);
+      req.flash('flashMessage', 'Error editing your profile. Try again.');
+      res.redirect('/profile')
+    });
+};
+
+module.exports.deleteProfile = (req, res, next) => {
+   User.deleteOne({_id: res.locals.currentUser.id})
+    .then(user => {
+      console.log(`User deleted: ${user}`);
+      req.flash('flashMessage', 'Your profile has been deleted. Hope to see you back soon.');
+      res.redirect('/')
+    })
+    .catch(e => {
+      console.log('error deleting user: ', e);
+      req.flash('flashMessage', 'Error deleting your profile. Try again.');
+      res.redirect('/profile')
+    });
 };
 
 module.exports.login = (req, res, next) => {
@@ -41,7 +94,6 @@ module.exports.doRegister = (req, res, next) => {
   if (req.files.length > 0) {
     req.body.profilePictures = req.files.map(file => file.path);
   }
-console.log(req.body)
   User.find({$or:[{email: req.body.email},{username: req.body.username}]})
   .then(user => res.render("register", { errorMessage: "Username or email already in use. Log in or try a different combination."}))
   .catch(next)
@@ -81,7 +133,30 @@ module.exports.doLoginGoogle = (req, res, next) => {
     } else {
       req.login(user, loginErr => {
         if (loginErr) next(loginErr)
-        else res.redirect('/')
+        else if (!user.aboutMe) {
+          req.flash('flashMessage', 'Your account has been created! Update details in your profile.');
+          res.redirect('/profile') }
+        else {
+          res.redirect('/') }
+      })
+    }
+  })(req, res, next)
+}
+
+module.exports.doLoginFacebook = (req, res, next) => {
+  passport.authenticate('facebook-auth', (error, user, validations) => {
+    if (error) {
+      next(error);
+    } else if (!user) {
+      res.status(400).render('login', { user: req.body, errorMessage: validations.error });
+    } else {
+      req.login(user, loginErr => {
+        if (loginErr) next(loginErr)
+        else if (!user.aboutMe) {
+          req.flash('flashMessage', 'Your account has been created! Update details in your profile.');
+          res.redirect('/profile') }
+        else {
+          res.redirect('/') }
       })
     }
   })(req, res, next)
@@ -89,9 +164,14 @@ module.exports.doLoginGoogle = (req, res, next) => {
 
 module.exports.view = (req, res, next) => {
   User.find({ username: req.params.username })
-    .then(users => {
-      res.render('user/view', { users })
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'author'
+      }
     })
+    .then(users => res.render('user/view', { users })
+    )
 };
 
 module.exports.logout = (req, res, next) => {
@@ -116,3 +196,25 @@ module.exports.activate = (req, res, next) => {
     })
     .catch((e) => next(e));
 };
+
+module.exports.addComment = (req, res, next) => {
+  if (req.body.private == 'on') {req.body.private = true}
+  Comment.create(req.body)
+  .then((c) => {
+    req.flash('flashMessage', 'Message posted!');
+    res.redirect(`/user/${req.params.username}`)
+  })
+}
+
+module.exports.deleteComment = (req, res, next) => {
+  console.log(req.headers.referer)
+  Comment.deleteOne({_id: req.params.id})
+  .then((c) => {
+    req.flash('flashMessage', 'Message deleted!');
+    if (req.headers.referer.includes('/profile')) {
+      res.redirect('/profile')
+    } else {
+      res.redirect(`/user/${req.params.username}`)
+    }
+  })
+}
