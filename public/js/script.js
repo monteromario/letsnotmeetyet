@@ -43,15 +43,11 @@ document.getElementById("lnkComments").onclick = function () {
 };
 
 const like = (element) => {
-  console.log("LIKED");
-  //   axios
-  //     .get(`/product/${element.getAttribute("data-productid")}/like`)
-  //     .then((response) => {
-  //       // Change icon to liked/disliked
-  //       // Change like number
-  //       element.classList.toggle("unliked");
-  //       const likeNumber = element.querySelector("span");
-  //       likeNumber.innerText = Number(likeNumber.innerText) + response.data.add;
-  //     })
-  //     .catch((e) => console.error("Error liking product", e));
+  axios
+    .get(`/user/${element.getAttribute("data-user_id")}/like`)
+    .then((response) => {
+      console.log(response)
+
+    })
+    .catch((e) => console.error("Error liking product", e));
 };

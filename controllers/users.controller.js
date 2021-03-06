@@ -31,7 +31,6 @@ module.exports.renderMap = (req, res, next) => {
         userPicture = profilePictures[0];
         return { username, coordinates, userPicture };
       });
-      console.log(userLocations);
       res.render("map", { userLocations });
     })
     .catch((e) => console.log(e));
@@ -104,22 +103,38 @@ module.exports.activate = (req, res, next) => {
 };
 
 module.exports.like = (req, res, next) => {
-  Match.findOne({ liker: req.currentUser._id, liked: req.params.productId })
-    .then((like) => {
-      if (!like) {
-        return Like.create({
-          product: req.params.productId,
-          user: req.currentUser._id,
-        }).then(() => {
-          // Dándole a like
-          res.json({ add: 1 });
-        });
+  console.log('USERID: ' + req.params.userId + "\n" + 'CURRENTUSER: ' + req.currentUser._id)
+  //const currentUserQuery = { _id: req.currentUser._id };
+  //const likedtUserQuery = { _id: req.params.userId };
+  //User.findById(req.currentUser._id)
+  // 
+  User.find(
+    { _id: req.currentUser._id, liked: { $elemMatch: { $eq: req.params.userId } } }
+  )
+    .then(user => {
+      let likedUSer = ""
+      User.findById(req.params.userId).then(user => likedUSer = userPicture)
+      if (user.length === 0) {
+        console.log('LIKE')
+        User.findByIdAndUpdate(req.currentUser._id,
+          { $push: { liked: req.params.userId } }, { useFindAndModify: false })
+          .then(user => console.log(`Added ${req.params.userId} : ${likedUSer.username} to liked`))
+          .catch(e => console.log(e))
       } else {
-        return Like.findByIdAndDelete(like._id).then(() => {
-          // Dándole a dislike
-          res.json({ add: -1 });
-        });
+        console.log('UNLIKE')
+        User.findByIdAndUpdate(req.currentUser._id,
+          { $pull: { liked: req.params.userId } }, { useFindAndModify: false })
+          .then(user => console.log(`Removed ${req.params.userId} : ${likedUSer.username} from liked`))
+          .catch(e => console.log(e))
       }
+      res.render("user/view", { likedUSer })
+      //console.log(user)
+      // if (user.liked.includes(req.params.userId)) {
+      //   console.log('UNLIKE:', req.params.userId)
+      //   user.liked = user.liked.filter(userId => userId != req.params.userId);
+      // } else {
+      //   console.log('LIKE', req.params.userId);
+      // }
     })
-    .catch((e) => next(e));
+    .catch(e => console.log(e));
 };

@@ -78,6 +78,7 @@ router.get("/user/:username", usersController.view);
 // );
 
 //Likes;
-router.get("/user/:userId/like", secure.isAuthenticated, usersController.like);
+router.get("/user/:userId/like", usersController.like);
+//router.get("/user/:userId/like", secure.isAuthenticated, usersController.like);
 
 module.exports = router;
