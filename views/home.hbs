@@ -13,8 +13,8 @@
             <a href="/user/{{username}}" class="homeLink">
                 <div class="card h-100 homeLinkDiv">
                     <img src="{{profilePictures.[0]}}?{{username}}"
-                        class="card-img-top"
-                        alt="{{username}} picture">
+                            class="card-img-top"
+                            alt="{{username}} picture" onerror="this.src = 'https://res.cloudinary.com/letsnotmeetyet/image/upload/v1615156923/letsnotmeetyet/pictures/default_home_sil7pz.png';">
                     <div class="card-body">
                         <h5 class="card-title">{{username}}</h5>
                         <p class="card-text">{{aboutMe}}</p>
@@ -24,21 +24,22 @@
         </div>
         {{/ifeq}}
         {{/each}}
-    {{else}}
-    <div class="text-center py-4">
-        <h3>Welcome to</h3>
-        <h1 class="fw-bold py-3">LET'S N<i class="fas fa-virus blink-image"></i>T
-            MEET YET</h1>
-        <h4 class="text-muted">The place to meet other people.</h4>
-        <h4 class="text-muted">But remember... you can't meet yet!</h4>
-        <img class="main-logo img-fluid py-3 blink-image"
-            src="./img/LNMY_logo.png">
-        <div>
-            <a href="/register"><button class="btn btn-outline-dark mb-5 mx-3">Register</button></a>
-            <a href="/login"><button class="btn btn-outline-dark mb-5 mx-3">Log-in</button></a>
+        {{else}}
+        <div class="text-center py-4">
+            <h3>Welcome to</h3>
+            <h1 class="fw-bold py-3">LET'S N<i class="fas fa-virus blink-image"></i>T
+                MEET YET</h1>
+            <h4 class="text-muted">The place to meet other people.</h4>
+            <h4 class="text-muted">But remember... you can't meet yet!</h4>
+            <img class="main-logo img-fluid py-3 blink-image"
+                src="./img/LNMY_logo.png">
+            <div>
+                <a href="/register"><button class="btn btn-outline-dark mb-5
+                        mx-3">Register</button></a>
+                <a href="/login"><button class="btn btn-outline-dark mb-5 mx-3">Log-in</button></a>
+            </div>
         </div>
+        {{/if}}
     </div>
-    {{/if}}
-</div>
 
-<script src="/js/scroll.js"></script>
+    <script src="/js/scroll.js"></script>
