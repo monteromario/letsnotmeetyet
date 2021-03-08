@@ -46,10 +46,13 @@ const like = (element) => {
   axios
     .get(`/user/${element.getAttribute("data-user_id")}/like`)
     .then((response) => {
+      if (response.data.match) {
+        console.log("ITS A MATCH");
+      }
       if (response.data.liked) {
         element.classList.add("btn-outline-danger");
         element.classList.remove("btn-outline-secondary");
-      } else {
+      } else if (!response.data.liked) {
         element.classList.remove("btn-outline-danger");
         element.classList.add("btn-outline-secondary");
       }

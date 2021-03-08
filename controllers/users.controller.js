@@ -34,7 +34,6 @@ module.exports.doEditProfile = (req, res, next) => {
     type: "Point",
     coordinates: [req.body.lat, req.body.lng],
   };
-  console.log(req.body);
   User.findOneAndUpdate({ username: req.body.username }, req.body, {
     new: true,
   })
@@ -109,7 +108,6 @@ module.exports.doRegister = (req, res, next) => {
   })
     .then((user) => {
       if (user.length > 0) {
-        console.log("REPEATED:", user);
         res.render("register", {
           errorMessage:
             "Username or email already in use. Log in or try a different combination.",
@@ -209,9 +207,6 @@ module.exports.view = (req, res, next) => {
     })
     .then((user) => {
       likedByUser = req.currentUser.liked.includes(user[0]._id);
-      console.log(req.currentUser.liked);
-      console.log(user[0]._id);
-      console.log(likedByUser);
       res.render("user/view", { user, likedByUser });
     });
 };
@@ -247,10 +242,6 @@ module.exports.like = (req, res, next) => {
       "CURRENTUSER: " +
       req.currentUser._id
   );
-  //const currentUserQuery = { _id: req.currentUser._id };
-  //const likedtUserQuery = { _id: req.params.userId };
-  //User.findById(req.currentUser._id)
-  //
   User.find({
     _id: req.currentUser._id,
     liked: { $elemMatch: { $eq: req.params.userId } },
@@ -259,6 +250,7 @@ module.exports.like = (req, res, next) => {
       let likedUSer = "";
       User.findById(req.params.userId).then((user) => (likedUSer = user));
       if (user.length === 0) {
+        //LIKE
         console.log("LIKE");
         User.findByIdAndUpdate(
           req.currentUser._id,
@@ -269,10 +261,39 @@ module.exports.like = (req, res, next) => {
             console.log(
               `Added ${req.params.userId} : ${likedUSer.username} to liked`
             );
-            res.json({ liked: true });
+            Match.create({
+              liker: req.currentUser._id,
+              liked: req.params.userId,
+            }).then((match) => {
+              console.log(
+                `Match created from ${match.liker} to ${match.liked}`
+              );
+            });
+            Match.findOne({
+              liker: req.params.userId,
+              liked: req.currentUser._id,
+            }).then((match) => {
+              if (match) {
+                console.log(
+                  "ITS A MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATCH"
+                );
+                User.findByIdAndUpdate(
+                  req.currentUser._id,
+                  { $push: { matched: req.params.userId } },
+                  { useFindAndModify: false }
+                ).then((user) => {
+                  console.log(`Match added to ${user.username}`);
+                  //Return response to front
+                  res.json({ liked: true, match: true });
+                });
+              } else {
+                res.json({ liked: true });
+              }
+            });
           })
           .catch((e) => console.log(e));
       } else {
+        //UNLIKE
         console.log("UNLIKE");
         User.findByIdAndUpdate(
           req.currentUser._id,
@@ -283,6 +304,20 @@ module.exports.like = (req, res, next) => {
             console.log(
               `Removed ${req.params.userId} : ${likedUSer.username} from liked`
             );
+            Match.findOneAndDelete({
+              liker: req.currentUser._id,
+              liked: req.params.userId,
+            }).then((match) => {
+              console.log(
+                `Match removed from ${match.liker} to ${match.liked}`
+              );
+            });
+            User.findByIdAndUpdate(
+              req.currentUser._id,
+              { $pull: { matches: req.params.userId } },
+              { useFindAndModify: false }
+            ).then((user) => `Match also removed in ${user.username} ddbb`);
+            //Return response to front
             res.json({ liked: false });
           })
           .catch((e) => console.log(e));
@@ -290,34 +325,6 @@ module.exports.like = (req, res, next) => {
       //res.redirect(`/user/${likedUSer.username}`)
     })
     .catch((e) => console.log(e));
-  Match.findOne({ liker: req.params.userId, liked: req.currentUser._id })
-    .then((match) => {
-      console.log("MATCH");
-      if (match) {
-        // User.findByIdAndUpdate(req.currentUser._id,
-        //   { $push: { matches: req.params.userId } }, { useFindAndModify: false })
-        //   .then(user => console.log(`Added ${req.params.userId} : to matches`))
-        //   .catch(e => console.log(e));
-        Match.create({
-          liker: req.currentUser._id,
-          liked: req.params.userId,
-        }).then(() => {
-          // Dándole a like
-          //res.json({ add: 1 });
-          console.log("Match created");
-        });
-      } else {
-        Match.create({
-          liker: req.currentUser._id,
-          liked: req.params.userId,
-        }).then(() => {
-          console.log("Not match detected");
-          // Dándole a dislike
-          //res.json({ add: -1 });
-        });
-      }
-    })
-    .catch((e) => next(e));
 };
 
 module.exports.addComment = (req, res, next) => {
