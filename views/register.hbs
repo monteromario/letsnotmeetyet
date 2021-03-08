@@ -3,10 +3,10 @@
     <h3>Join <strong>Let's N<i class="fas fa-virus"></i>t Meet Yet</strong> community</h3>
   </div>
   {{#if errorMessage}}
-        <div class="alert alert-danger m-5" role="alert">
-            {{errorMessage}}
-        </div>
-        {{/if}}
+  <div class="alert alert-danger m-5" role="alert">
+    {{errorMessage}}
+  </div>
+  {{/if}}
   <form class="pb-5" action="/register" method="POST" enctype="multipart/form-data">
     <div class="row mb-3">
       <label for="inputUsername" class="col-sm-2 col-form-label">User name</label>
@@ -99,16 +99,16 @@
     {{!-- d-none --}}
     <div class="row mb-3">
       <label for="inputLocation" class="col-sm-2 col-form-label">Location</label>
+    </div>
+    <div class="mb-3">
+      <div id="map" class="row mx-1 mb-3"></div>
+      <div class="d-flex justify-content-center">
+        <input type="text" name="lat" value="{{lat}}" class="form-control w-25 mx-2" id="lat" required>
+        <input type="text" name="lng" value="{{lng}}" class="form-control w-25 mx-2" id="lng" required>
       </div>
-      <div class="mb-3">
-        <div id="map" class="row mx-1 mb-3"></div>
-        <div class="d-flex justify-content-center">
-          <input type="string" name="lat" value="{{lat}}" class="form-control w-25 mx-2" id="lat" disabled required>
-          <input type="string" name="lng" value="{{lng}}" class="form-control w-25 mx-2" id="lng" disabled required>
-        </div>
-      </div>
-      <div class="text-center">
-        <button type="submit" class="btn btn-dark text-center ml-5 mb-5">Sign in</button>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-dark text-center ml-5 mb-5">Sign in</button>
     </div>
   </form>
 </div>
