@@ -22,11 +22,11 @@ module.exports.profile = (req, res, next) => {
         coordinates: user[0].location.coordinates,
         userPicture: user[0].profilePictures
       }
-      console.log(userLocations)
       res.render('user/profile', { user, userLocations })
     }
     )
 };
+
 
 module.exports.editProfile = (req, res, next) => {
   res.render("user/edit");
@@ -186,8 +186,13 @@ module.exports.view = (req, res, next) => {
         path: 'author'
       }
     })
-    .then(users => res.render('user/view', { users })
-    )
+    .then(user => {
+      likedByUser = req.currentUser.liked.includes(user[0]._id)
+      console.log(req.currentUser.liked)
+      console.log(user[0]._id)
+      console.log(likedByUser)
+      res.render('user/view', { user, likedByUser })
+    })
 };
 
 module.exports.logout = (req, res, next) => {
@@ -241,10 +246,9 @@ module.exports.like = (req, res, next) => {
       //res.redirect(`/user/${likedUSer.username}`)
     })
     .catch(e => console.log(e));
-  console.log('MATCH NOW')
   Match.findOne({ liker: req.params.userId, liked: req.currentUser._id })
     .then((match) => {
-      console.log('MATCH', match)
+      console.log('MATCH')
       if (match) {
         // User.findByIdAndUpdate(req.currentUser._id,
         //   { $push: { matches: req.params.userId } }, { useFindAndModify: false })
