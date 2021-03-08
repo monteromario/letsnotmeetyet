@@ -265,11 +265,12 @@ module.exports.like = (req, res, next) => {
           { $push: { liked: req.params.userId } },
           { useFindAndModify: false }
         )
-          .then((user) =>
+          .then((user) => {
             console.log(
               `Added ${req.params.userId} : ${likedUSer.username} to liked`
-            )
-          )
+            );
+            res.json({ liked: true });
+          })
           .catch((e) => console.log(e));
       } else {
         console.log("UNLIKE");
@@ -278,11 +279,12 @@ module.exports.like = (req, res, next) => {
           { $pull: { liked: req.params.userId } },
           { useFindAndModify: false }
         )
-          .then((user) =>
+          .then((user) => {
             console.log(
               `Removed ${req.params.userId} : ${likedUSer.username} from liked`
-            )
-          )
+            );
+            res.json({ liked: false });
+          })
           .catch((e) => console.log(e));
       }
       //res.redirect(`/user/${likedUSer.username}`)
