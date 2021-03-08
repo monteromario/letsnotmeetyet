@@ -46,8 +46,16 @@ const like = (element) => {
   axios
     .get(`/user/${element.getAttribute("data-user_id")}/like`)
     .then((response) => {
-      //console.log(response)
-
+      if (response.data.match) {
+        console.log("ITS A MATCH");
+      }
+      if (response.data.liked) {
+        element.classList.add("btn-outline-danger");
+        element.classList.remove("btn-outline-secondary");
+      } else if (!response.data.liked) {
+        element.classList.remove("btn-outline-danger");
+        element.classList.add("btn-outline-secondary");
+      }
     })
     .catch((e) => console.error("Error liking product", e));
 };

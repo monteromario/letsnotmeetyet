@@ -5,26 +5,24 @@ const { sendActivationEmail } = require("../config/mailer");
 const { sendResetEmail } = require("../config/mailer");
 const passport = require('passport');
 const mongoose = require("mongoose");
-const flash = require('connect-flash');
-
+const flash = require("connect-flash");
 
 module.exports.profile = (req, res, next) => {
-   User.find({ username: res.locals.currentUser.username })
+  User.find({ username: res.locals.currentUser.username })
     .populate({
-      path: 'comments',
+      path: "comments",
       populate: {
-        path: 'author'
-      }
+        path: "author",
+      },
     })
-    .then(user => {
+    .then((user) => {
       let userLocations = {
         username: user[0].username, 
         coordinates: user[0].location.coordinates, 
         userPicture: user[0].profilePictures 
-      }
+      };
       res.render('user/profile', { user, userLocations })
-    }
-    )
+    });
 };
 
 module.exports.editProfile = (req, res, next) => {
@@ -33,20 +31,23 @@ module.exports.editProfile = (req, res, next) => {
 
 module.exports.doEditProfile = (req, res, next) => {
   req.body.location = {
-    type: 'Point', 
-    coordinates: [ req.body.lat, req.body.lng ]
-  }
+    type: "Point",
+    coordinates: [req.body.lat, req.body.lng],
+  };
   User.findOneAndUpdate({ username: req.body.username }, req.body, {
-    new: true
+    new: true,
   })
     .then((u) => {
-      req.flash('flashMessage', `${u.firstName}, your profile has been updated.`);
-    res.redirect('/profile');
-})
-    .catch(e => {
-      console.log('error editing user: ', e);
-      req.flash('flashMessage', 'Error editing your profile. Try again.');
-      res.redirect('/profile')
+      req.flash(
+        "flashMessage",
+        `${u.firstName}, your profile has been updated.`
+      );
+      res.redirect("/profile");
+    })
+    .catch((e) => {
+      console.log("error editing user: ", e);
+      req.flash("flashMessage", "Error editing your profile. Try again.");
+      res.redirect("/profile");
     });
 };
 
@@ -57,10 +58,10 @@ module.exports.deleteProfile = (req, res, next) => {
       req.flash('flashMessage', 'Your profile has been deleted. Hope to see you back soon.');
       res.redirect('/')
     })
-    .catch(e => {
-      console.log('error deleting user: ', e);
-      req.flash('flashMessage', 'Error deleting your profile. Try again.');
-      res.redirect('/profile')
+    .catch((e) => {
+      console.log("error deleting user: ", e);
+      req.flash("flashMessage", "Error deleting your profile. Try again.");
+      res.redirect("/profile");
     });
 };
 
@@ -85,13 +86,11 @@ module.exports.renderMap = (req, res, next) => {
         return { username, coordinates, userPicture };
       });
       res.render("map", { userLocations });
-
     })
     .catch((e) => console.log(e));
 };
 
 module.exports.doRegister = (req, res, next) => {
-
   function renderWithErrors(error, data) {
       res.status(400).render("register", {
         errorMessage: error, data}
@@ -153,42 +152,54 @@ module.exports.doLogin = (req, res, next) => {
 };
 
 module.exports.doLoginGoogle = (req, res, next) => {
-  passport.authenticate('google-auth', (error, user, validations) => {
+  passport.authenticate("google-auth", (error, user, validations) => {
     if (error) {
       next(error);
     } else if (!user) {
-      res.status(400).render('login', { user: req.body, errorMessage: validations.error });
+      res
+        .status(400)
+        .render("login", { user: req.body, errorMessage: validations.error });
     } else {
-      req.login(user, loginErr => {
-        if (loginErr) next(loginErr)
+      req.login(user, (loginErr) => {
+        if (loginErr) next(loginErr);
         else if (!user.aboutMe) {
-          req.flash('flashMessage', 'Your account has been created! Update details in your profile.');
-          res.redirect('/profile') }
-        else {
-          res.redirect('/') }
-      })
+          req.flash(
+            "flashMessage",
+            "Your account has been created! Update details in your profile."
+          );
+          res.redirect("/profile");
+        } else {
+          res.redirect("/");
+        }
+      });
     }
-  })(req, res, next)
-}
+  })(req, res, next);
+};
 
 module.exports.doLoginFacebook = (req, res, next) => {
-  passport.authenticate('facebook-auth', (error, user, validations) => {
+  passport.authenticate("facebook-auth", (error, user, validations) => {
     if (error) {
       next(error);
     } else if (!user) {
-      res.status(400).render('login', { user: req.body, errorMessage: validations.error });
+      res
+        .status(400)
+        .render("login", { user: req.body, errorMessage: validations.error });
     } else {
-      req.login(user, loginErr => {
-        if (loginErr) next(loginErr)
+      req.login(user, (loginErr) => {
+        if (loginErr) next(loginErr);
         else if (!user.aboutMe) {
-          req.flash('flashMessage', 'Your account has been created! Update details in your profile.');
-          res.redirect('/profile') }
-        else {
-          res.redirect('/') }
-      })
+          req.flash(
+            "flashMessage",
+            "Your account has been created! Update details in your profile."
+          );
+          res.redirect("/profile");
+        } else {
+          res.redirect("/");
+        }
+      });
     }
-  })(req, res, next)
-}
+  })(req, res, next);
+};
 
 module.exports.help = (req, res, next) => {
   res.render('help')
@@ -228,13 +239,15 @@ module.exports.doHelp = (req, res, next) => {
 module.exports.view = (req, res, next) => {
   User.find({ username: req.params.username })
     .populate({
-      path: 'comments',
+      path: "comments",
       populate: {
-        path: 'author'
-      }
+        path: "author",
+      },
     })
-    .then(users => res.render('user/view', { users })
-    )
+    .then((user) => {
+      likedByUser = req.currentUser.liked.includes(user[0]._id);
+      res.render("user/view", { user, likedByUser });
+    });
 };
 
 module.exports.logout = (req, res, next) => {
@@ -261,43 +274,107 @@ module.exports.activate = (req, res, next) => {
 };
 
 module.exports.like = (req, res, next) => {
-  console.log('USERID: ' + req.params.userId + "\n" + 'CURRENTUSER: ' + req.currentUser._id)
-  //const currentUserQuery = { _id: req.currentUser._id };
-  //const likedtUserQuery = { _id: req.params.userId };
-  //User.findById(req.currentUser._id)
-  // 
-  User.find(
-    { _id: req.currentUser._id, liked: { $elemMatch: { $eq: req.params.userId } } }
-  )
-    .then(user => {
-      let likedUSer = ""
-      User.findById(req.params.userId).then(user => likedUSer = user)
+  console.log(
+    "USERID: " +
+      req.params.userId +
+      "\n" +
+      "CURRENTUSER: " +
+      req.currentUser._id
+  );
+  User.find({
+    _id: req.currentUser._id,
+    liked: { $elemMatch: { $eq: req.params.userId } },
+  })
+    .then((user) => {
+      let likedUSer = "";
+      User.findById(req.params.userId).then((user) => (likedUSer = user));
       if (user.length === 0) {
-        console.log('LIKE')
-        User.findByIdAndUpdate(req.currentUser._id,
-          { $push: { liked: req.params.userId } }, { useFindAndModify: false })
-          .then(user => console.log(`Added ${req.params.userId} : ${likedUSer.username} to liked`))
-          .catch(e => console.log(e))
+        //LIKE
+        console.log("LIKE");
+        User.findByIdAndUpdate(
+          req.currentUser._id,
+          { $push: { liked: req.params.userId } },
+          { useFindAndModify: false }
+        )
+          .then((user) => {
+            console.log(
+              `Added ${req.params.userId} : ${likedUSer.username} to liked`
+            );
+            Match.create({
+              liker: req.currentUser._id,
+              liked: req.params.userId,
+            }).then((match) => {
+              console.log(
+                `Match created from ${match.liker} to ${match.liked}`
+              );
+            });
+            Match.findOne({
+              liker: req.params.userId,
+              liked: req.currentUser._id,
+            }).then((match) => {
+              if (match) {
+                console.log(
+                  "ITS A MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATCH"
+                );
+                User.findByIdAndUpdate(
+                  req.currentUser._id,
+                  { $push: { matched: req.params.userId } },
+                  { useFindAndModify: false }
+                ).then((user) => {
+                  console.log(`Match added to ${user.username}`);
+                  //Return response to front
+                  res.json({ liked: true, match: true });
+                });
+              } else {
+                res.json({ liked: true });
+              }
+            });
+          })
+          .catch((e) => console.log(e));
       } else {
-        console.log('UNLIKE')
-        User.findByIdAndUpdate(req.currentUser._id,
-          { $pull: { liked: req.params.userId } }, { useFindAndModify: false })
-          .then(user => console.log(`Removed ${req.params.userId} : ${likedUSer.username} from liked`))
-          .catch(e => console.log(e))
+        //UNLIKE
+        console.log("UNLIKE");
+        User.findByIdAndUpdate(
+          req.currentUser._id,
+          { $pull: { liked: req.params.userId } },
+          { useFindAndModify: false }
+        )
+          .then((user) => {
+            console.log(
+              `Removed ${req.params.userId} : ${likedUSer.username} from liked`
+            );
+            Match.findOneAndDelete({
+              liker: req.currentUser._id,
+              liked: req.params.userId,
+            }).then((match) => {
+              console.log(
+                `Match removed from ${match.liker} to ${match.liked}`
+              );
+            });
+            User.findByIdAndUpdate(
+              req.currentUser._id,
+              { $pull: { matches: req.params.userId } },
+              { useFindAndModify: false }
+            ).then((user) => `Match also removed in ${user.username} ddbb`);
+            //Return response to front
+            res.json({ liked: false });
+          })
+          .catch((e) => console.log(e));
       }
-      res.redirect(`/user/${likedUSer.username}`)
+      //res.redirect(`/user/${likedUSer.username}`)
     })
-    .catch(e => console.log(e));
+    .catch((e) => console.log(e));
 };
 
 module.exports.addComment = (req, res, next) => {
-  if (req.body.private == 'on') {req.body.private = true}
-  Comment.create(req.body)
-  .then((c) => {
-    req.flash('flashMessage', 'Message posted!');
-    res.redirect(`/user/${req.params.username}`)
-  })
-}
+  if (req.body.private == "on") {
+    req.body.private = true;
+  }
+  Comment.create(req.body).then((c) => {
+    req.flash("flashMessage", "Message posted!");
+    res.redirect(`/user/${req.params.username}`);
+  });
+};
 
 module.exports.deleteComment = (req, res, next) => {
   Comment.deleteOne({_id: req.params.id})
@@ -306,7 +383,7 @@ module.exports.deleteComment = (req, res, next) => {
     if (req.headers.referer.includes('/profile')) {
       res.redirect('/profile')
     } else {
-      res.redirect(`/user/${req.params.username}`)
+      res.redirect(`/user/${req.params.username}`);
     }
-  })
-}
+  });
+};
