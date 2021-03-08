@@ -1,8 +1,8 @@
 const User = require("../models/User.model");
 const Match = require("../models/Match.model");
-
 const Comment = require("../models/Comment.model");
 const { sendActivationEmail } = require("../config/mailer");
+const { sendResetEmail } = require("../config/mailer");
 const passport = require('passport');
 const mongoose = require("mongoose");
 const flash = require('connect-flash');
@@ -22,7 +22,6 @@ module.exports.profile = (req, res, next) => {
         coordinates: user[0].location.coordinates, 
         userPicture: user[0].profilePictures 
       }
-      console.log(userLocations)
       res.render('user/profile', { user, userLocations })
     }
     )
@@ -37,7 +36,6 @@ module.exports.doEditProfile = (req, res, next) => {
     type: 'Point', 
     coordinates: [ req.body.lat, req.body.lng ]
   }
-  console.log(req.body)
   User.findOneAndUpdate({ username: req.body.username }, req.body, {
     new: true
   })
@@ -55,7 +53,7 @@ module.exports.doEditProfile = (req, res, next) => {
 module.exports.deleteProfile = (req, res, next) => {
    User.deleteOne({_id: res.locals.currentUser.id})
     .then(user => {
-      console.log(`User deleted: ${user}`);
+      console.log(`User deleted: ${user.username}`);
       req.flash('flashMessage', 'Your profile has been deleted. Hope to see you back soon.');
       res.redirect('/')
     })
@@ -93,19 +91,14 @@ module.exports.renderMap = (req, res, next) => {
 };
 
 module.exports.doRegister = (req, res, next) => {
-  req.body.location = {
-    type: "Point",
-    coordinates: [Number(req.body.lng), Number(req.body.lat)],
-  };
 
-  if (req.files.length > 0) {
-    req.body.profilePictures = req.files.map((file) => file.path);
-  }
-  User.find({$or:[{email: req.body.email},{username: req.body.username}]})
-  .then(user => res.render("register", { errorMessage: "Username or email already in use. Log in or try a different combination."}))
-  .catch(next)
+  function renderWithErrors(error, data) {
+      res.status(400).render("register", {
+        errorMessage: error, data}
+      )};
 
-  User.create(req.body)
+  function createUser(user) {
+    User.create(user)
     .then((u) => {
       sendActivationEmail(u.email, u.firstName, u.activationToken);
       res.render("login", {
@@ -117,6 +110,29 @@ module.exports.doRegister = (req, res, next) => {
       console.log('error creating user: ', e);
       res.render('register', { errorMessage: e })
     });
+  }
+
+  req.body.location = {
+    type: "Point",
+    coordinates: [Number(req.body.lng), Number(req.body.lat)],
+  };
+
+  if (req.files.length > 0) {
+    req.body.profilePictures = req.files.map((file) => file.path);
+  }
+
+  User.find({$or:[{email: req.body.email},{username: req.body.username}]})
+  .then(user => {
+    if (user.length != 0) {
+      renderWithErrors("Username or email already in use. Log in or try a different combination.", req.body)
+      } else {
+        createUser(req.body)
+      }
+  })
+  .catch(e => {
+      console.log('error checking users in DB: ', e);
+      renderWithErrors(e);
+    }); 
 }
 
 module.exports.doLogin = (req, res, next) => {
@@ -174,6 +190,41 @@ module.exports.doLoginFacebook = (req, res, next) => {
   })(req, res, next)
 }
 
+module.exports.help = (req, res, next) => {
+  res.render('help')
+};
+
+module.exports.doHelp = (req, res, next) => {
+  if (req.body.forgot) {
+    User.findOne({ email: req.body.email })
+    .then((u) => {
+      if (u == null) {
+        res.status(400).render('help', { user: req.body, errorMessage: "E-mail not found." })
+        }
+      else if (u.active) {
+        res.render('help', { user: req.body, errorMessage: "Your account is already activated. You can log-in." })
+      } else {
+        sendActivationEmail(u.email, u.firstName, u.activationToken);
+        res.render('help', { user: req.body, succesMessage: "E-mail sent. Check your inbox." })
+        next;
+      }
+    })
+    //.catch(res.status(400).render('help', { user: req.body, errorMessage: "E-mail not found." }))
+  } else if (req.body.reset) {
+      User.findOne({ email: req.body.email })
+    .then((u) => {
+      if (u == null) {
+        res.status(400).render('help', { user: req.body, errorMessage: "E-mail not found." })
+        }
+      else {
+        sendResetEmail(u.email, u.firstName, u.activationToken);
+        res.render('help', { user: req.body, succesMessage: "Reset e-mail sent. Check your inbox to continue the process." })
+        next;
+      }
+    })
+  }
+};
+
 module.exports.view = (req, res, next) => {
   User.find({ username: req.params.username })
     .populate({
@@ -199,7 +250,7 @@ module.exports.activate = (req, res, next) => {
     .then((u) => {
       if (u) {
         res.render("login", {
-          username: u.username,
+          username: u.email,
           succesMessage: "Account activated! Now you can log in.",
         });
       } else {
@@ -249,7 +300,6 @@ module.exports.addComment = (req, res, next) => {
 }
 
 module.exports.deleteComment = (req, res, next) => {
-  console.log(req.headers.referer)
   Comment.deleteOne({_id: req.params.id})
   .then((c) => {
     req.flash('flashMessage', 'Message deleted!');

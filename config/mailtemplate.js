@@ -1,4 +1,4 @@
-module.exports.generateTemplate = (firstName, activationToken) => {
+module.exports.generateActivationTemplate = (firstName, activationToken) => {
 	return `
     <!doctype html>
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -341,4 +341,14 @@ module.exports.generateTemplate = (firstName, activationToken) => {
       </body>
     </html>
     `
+}
+
+module.exports.generateResetTemplate = (email, firstName, activationToken) => {
+	return `
+    <!doctype html>
+    this is a test
+    ${email}
+    ${firstName}
+    ${activationToken}
+  `
 }

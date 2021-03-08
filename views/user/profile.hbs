@@ -71,7 +71,7 @@
                     </script>
             </div>
             <div id="divComments" hidden>
-        {{#if user.[0].comments}}
+            {{#if user.[0].comments}}
             {{#each user.[0].comments as | comment |}}
             {{#if comment.private}}
             <div class="m-3 text-left card bg-light">
@@ -132,31 +132,15 @@
             </div>
             {{/each}}
             {{else}}
-            <div class="m-5 text-center">Your profiles has no comments yet.</div>
+            <div class="m-5 text-center">Your profile has no comments yet.</div>
         {{/if}}
         </div>
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">{{currentUser.firstName}}
-            {{currentUser.lastName}}</li>
-          <li class="list-group-item">{{currentUser.gender}}</li>
-          <li class="list-group-item">Interested in:
-            {{currentUser.preferences}}</li>
-        </ul>
+        
       </div>
-      <div id="divPictures" hidden>
-        {{#each currentUser.profilePictures}}
-        <img class="img-fluid p-5" src="{{this}}" alt="{{currentUser.username}}">
-        {{/each}}
-      </div>
-      <div id="divLocation" hidden>
-        {{currentUser.location}}
-      </div>
-      <div id="divComments" hidden>
-        Comments
-      </div>
+      
+      
     </div>
-  </div>
 </div>
 
 <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">

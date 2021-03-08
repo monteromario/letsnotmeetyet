@@ -29,6 +29,8 @@ router.get("/map", usersController.renderMap);
 
 router.get("/login", secure.isNotAuthenticated, usersController.login);
 router.post("/login", secure.isNotAuthenticated, usersController.doLogin);
+router.get("/login/help", secure.isNotAuthenticated, usersController.help);
+router.post("/login/help", secure.isNotAuthenticated, usersController.doHelp);
 router.get("/activate/:token",secure.isNotAuthenticated, usersController.activate);
 router.get('/authenticate/google', passport.authenticate('google-auth', { scope: GOOGLE_SCOPES }))
 router.get('/authenticate/google/callback', usersController.doLoginGoogle)
