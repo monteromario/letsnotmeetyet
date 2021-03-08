@@ -47,7 +47,22 @@ const like = (element) => {
     .get(`/user/${element.getAttribute("data-user_id")}/like`)
     .then((response) => {
       if (response.data.match) {
-        console.log("ITS A MATCH");
+        matchdiv = document.getElementById('itsAMatch')
+        console.log(matchdiv)
+        setTimeout(function () {
+          matchdiv.classList.toggle('fullscreen')
+          matchdiv.innerHTML = '<h1 style="font-size:15rem;">IT\'S A MATCH!</h1>'
+        }, 150);
+        setTimeout(function () {
+          matchdiv.innerHTML = ""
+          matchdiv.classList.add('darkbg')
+          matchdiv.innerHTML = '<h1 style="font-size:15rem;">BUT N<i class="fas fa-virus"></i>T YET</h1>'
+        }, 1500);
+        setTimeout(function () {
+          matchdiv.classList.toggle('fullscreen')
+          matchdiv.classList.remove('darkbg')
+          matchdiv.innerHTML = ""
+        }, 3000);
       }
       if (response.data.liked) {
         element.classList.add("btn-outline-danger");
