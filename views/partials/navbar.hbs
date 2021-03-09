@@ -19,6 +19,9 @@
                 <li class="nav-item">
                   <a class="nav-link" href="/map">Map</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/favorites">Favorites</a>
+                </li>
                 {{else}}
                 <li class="nav-item">
                     <a class="nav-link" href="/register">Register</a>
@@ -29,7 +32,7 @@
                 {{/if}}
             </ul>
             {{#if currentUser}}
-            <span class="text-muted p-2"><small>Logged in as: </small></span>
+            <span class="text-muted p-2"><small>Logged as: </small></span>
             <a href="/profile"
                 class="text-light">{{currentUser.username}}</a>
             <small class="logoutLink"><a href="/logout" class="p-2 text-muted">(Logout)</a></small>

@@ -50,6 +50,11 @@ img {
     max-height: 106px;
 }
 
+.img-favorite {
+    width: 106px;
+    height: 106px; 
+}
+
 a {
     text-decoration: none;
 }

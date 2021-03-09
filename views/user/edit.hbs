@@ -1,12 +1,12 @@
 <div class="container">
     <div class="py-5">
         <h3>Edit your profile</h3>
-        {{currentUser}}
     </div>
     <form class="pb-5" action="/profile/edit" method="POST"
-        {{!-- enctype="multipart/form-data" --}}
-        >
+        enctype="multipart/form-data">
         <div class="row mb-3">
+            <input type="text" id="currentUsername"
+                    name="currentUsername" value="{{currentUser.username}}" hidden>
             <label for="inputUsername" class="col-sm-2 col-form-label">User name</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="inputUsername"
@@ -35,20 +35,20 @@
                     name="lastName" value="{{currentUser.lastName}}">
             </div>
         </div>
-        {{!-- <div class="row mb-3">
-            <label for="inputPassword" class="col-sm-2 col-form-label">New password</label>
+        <div class="row mb-3">
+            <label for="inputPassword" class="col-sm-2 col-form-label">New
+                password</label>
             <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword"
-                    name="password" placeholder="Leave blank to not modify old password">
+                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#confirmationModal">Reset password</button>
             </div>
-        </div> --}}
+        </div>
         <fieldset class="row mb-3">
             <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
             <div class="col-sm-10">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="gender"
                         id="radio1" value="Male" {{#ifeq
-                        currentUser.gender "Male"}}checked{{/ifeq}}>
+                        currentUser.gender "Male" }}checked{{/ifeq}}>
                     <label class="form-check-label" for="radio1">
                         Male
                     </label>
@@ -56,7 +56,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="gender"
                         id="radio2" value="Female" {{#ifeq
-                        currentUser.gender "Female"}}checked{{/ifeq}}>
+                        currentUser.gender "Female" }}checked{{/ifeq}}>
                     <label class="form-check-label" for="radio2">
                         Female
                     </label>
@@ -64,7 +64,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="gender"
                         id="radio3" value="Other" {{#ifeq
-                        currentUser.gender "Other"}}checked{{/ifeq}}>
+                        currentUser.gender "Other" }}checked{{/ifeq}}>
                     <label class="form-check-label" for="radio3">
                         Other
                     </label>
@@ -84,7 +84,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio"
                         name="preferences" id="radio4" value="Male" {{#ifeq
-                        currentUser.preferences "Male"}}checked{{/ifeq}}>
+                        currentUser.preferences "Male" }}checked{{/ifeq}}>
                     <label class="form-check-label" for="radio1">
                         Boys
                     </label>
@@ -92,7 +92,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio"
                         name="preferences" id="radio5" value="Female" {{#ifeq
-                        currentUser.preferences "Female"}}checked{{/ifeq}}>
+                        currentUser.preferences "Female" }}checked{{/ifeq}}>
                     <label class="form-check-label" for="radio2">
                         Girls
                     </label>
@@ -100,21 +100,22 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio"
                         name="preferences" id="radio6" value="All" {{#ifeq
-                        currentUser.preferences "All"}}checked{{/ifeq}}>
+                        currentUser.preferences "All" }}checked{{/ifeq}}>
                     <label class="form-check-label" for="radio3">
                         All
                     </label>
                 </div>
             </div>
         </fieldset>
-        {{!-- <div class="row mb-3">
+        <div class="row mb-3">
             <label for="inputPictures" class="col-sm-2 col-form-label">Pictures</label>
             <div class="col-sm-10">
-                <div class="mb-2">{{#each currentUser.profilePictures}}<img src="{{this}}" style="height: 100px;">{{/each}}</div>
+                <div class="mb-2">{{#each currentUser.profilePictures}}<img
+                        src="{{this}}" style="height: 100px;">{{/each}}</div>
                 <input type="file" class="form-control" id="inputPictures"
                     name="profilePictures" multiple>
             </div>
-        </div> --}}
+        </div>
         {{!-- d-none --}}
         <div class="row mb-3">
             <label for="inputLocation" class="col-sm-2 col-form-label">Location</label>
@@ -122,8 +123,12 @@
         </div>
         <div class="mb-4">
             <div class="d-flex justify-content-center">
-                <input type="text" name="lat" value="{{currentUser.location.coordinates.[0]}}" class="form-control w-25 mx-2" id="lat" readonly required>
-                <input type="text" name="lng" value="{{currentUser.location.coordinates.[1]}}" class="form-control w-25 mx-2" id="lng" readonly required>
+                <input type="text" name="lat"
+                    value="{{currentUser.location.coordinates.[0]}}"
+                    class="form-control w-25 mx-2" id="lat" readonly required>
+                <input type="text" name="lng"
+                    value="{{currentUser.location.coordinates.[1]}}"
+                    class="form-control w-25 mx-2" id="lng" readonly required>
             </div>
         </div>
         <div class="text-center">
@@ -135,6 +140,24 @@
                     border-dark mb-5 mx-2">Discard changes</button></a>
         </div>
     </form>
+</div>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">Security advice</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{currentUser.firstName}}, due to security reasons you will have to logout and use your e-mail to reset your password. Do you want to proceed?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a href="./resetPassword"><button type="button" class="btn btn-danger">Continue</button></a>
+      </div>
+    </div>
+  </div>
 </div>
 
 
