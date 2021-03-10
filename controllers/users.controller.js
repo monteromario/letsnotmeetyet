@@ -398,11 +398,16 @@ module.exports.like = (req, res, next) => {
                   "ITS A MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATCH"
                 );
                 User.findByIdAndUpdate(
+                  req.params.userId,
+                  { $push: { matched: req.currentUser._id } },
+                  { useFindAndModify: false }
+                ).then((user) => console.log(`Match added to ${user.username} 1/2`));
+                User.findByIdAndUpdate(
                   req.currentUser._id,
-                  { $push: { matches: req.params.userId } },
+                  { $push: { matched: req.params.userId } },
                   { useFindAndModify: false }
                 ).then((user) => {
-                  console.log(`Match added to ${user.username}`);
+                  console.log(`Match added to ${user.username} 2/2`);
                   //Return response to front
                   res.json({ liked: true, match: true });
                 });
@@ -433,10 +438,15 @@ module.exports.like = (req, res, next) => {
               );
             });
             User.findByIdAndUpdate(
+              req.params.userId,
+              { $pull: { matched: req.currentUser._id } },
+              { useFindAndModify: false }
+            ).then((user) => console.log(`Match removed ${user.username} 1/2`));
+            User.findByIdAndUpdate(
               req.currentUser._id,
               { $pull: { matches: req.params.userId } },
               { useFindAndModify: false }
-            ).then((user) => `Match also removed in ${user.username} ddbb`);
+            ).then((user) => `Match also removed in ${user.username} 2/2`);
             //Return response to front
             res.json({ liked: false });
           })
