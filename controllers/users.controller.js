@@ -3,7 +3,7 @@ const Match = require("../models/Match.model");
 const Comment = require("../models/Comment.model");
 const { sendActivationEmail } = require("../config/mailer");
 const { sendResetEmail } = require("../config/mailer");
-const passport = require('passport');
+const passport = require("passport");
 const mongoose = require("mongoose");
 const flash = require("connect-flash");
 const PASSWORD_PATTERN = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
@@ -19,16 +19,17 @@ module.exports.profile = (req, res, next) => {
     .then((user) => {
       let userLocations = [
         {
-        username: user[0].username, 
-        coordinates: user[0].location.coordinates, 
-        userPicture: user[0].profilePictures 
-      },
+          username: user[0].username,
+          coordinates: user[0].location.coordinates,
+          userPicture: user[0].profilePictures,
+        },
         {
-        username: user[0].username, 
-        coordinates: user[0].location.coordinates, 
-        userPicture: user[0].profilePictures 
-      }];
-      res.render('user/profile', { user, userLocations })
+          username: user[0].username,
+          coordinates: user[0].location.coordinates,
+          userPicture: user[0].profilePictures,
+        },
+      ];
+      res.render("user/profile", { user, userLocations });
     });
 };
 
@@ -40,7 +41,7 @@ module.exports.doEditProfile = (req, res, next) => {
   if (req.files.length > 0) {
     req.body.profilePictures = req.files.map((file) => file.path);
   }
-  
+
   req.body.location = {
     type: "Point",
     coordinates: [req.body.lat, req.body.lng],
@@ -63,11 +64,14 @@ module.exports.doEditProfile = (req, res, next) => {
 };
 
 module.exports.deleteProfile = (req, res, next) => {
-   User.deleteOne({_id: res.locals.currentUser.id})
-    .then(user => {
+  User.deleteOne({ _id: res.locals.currentUser.id })
+    .then((user) => {
       console.log(`User deleted: ${user.username}`);
-      req.flash('flashMessage', 'Your profile has been deleted. Hope to see you back soon.');
-      res.redirect('/')
+      req.flash(
+        "flashMessage",
+        "Your profile has been deleted. Hope to see you back soon."
+      );
+      res.redirect("/");
     })
     .catch((e) => {
       console.log("error deleting user: ", e);
@@ -78,9 +82,12 @@ module.exports.deleteProfile = (req, res, next) => {
 
 module.exports.profileResetPassword = (req, res, next) => {
   req.logout();
-  req.flash('flashMessage', 'You have been disconnected. Type your e-mail to start password reset process.');
-  res.redirect('../login/help')
-}
+  req.flash(
+    "flashMessage",
+    "You have been disconnected. Type your e-mail to start password reset process."
+  );
+  res.redirect("../login/help");
+};
 
 module.exports.login = (req, res, next) => {
   res.render("login");
@@ -109,23 +116,25 @@ module.exports.renderMap = (req, res, next) => {
 
 module.exports.doRegister = (req, res, next) => {
   function renderWithErrors(error, data) {
-      res.status(400).render("register", {
-        errorMessage: error, data}
-      )};
+    res.status(400).render("register", {
+      errorMessage: error,
+      data,
+    });
+  }
 
   function createUser(user) {
     User.create(user)
-    .then((u) => {
-      sendActivationEmail(u.email, u.firstName, u.activationToken);
-      res.render("login", {
-        succesMessage:
-          "Register finished. Check you email to validate your account.",
+      .then((u) => {
+        sendActivationEmail(u.email, u.firstName, u.activationToken);
+        res.render("login", {
+          succesMessage:
+            "Register finished. Check you email to validate your account.",
+        });
+      })
+      .catch((e) => {
+        console.log("error creating user: ", e);
+        res.render("register", { errorMessage: e });
       });
-    })
-    .catch(e => {
-      console.log('error creating user: ', e);
-      res.render('register', { errorMessage: e })
-    });
   }
 
   req.body.location = {
@@ -137,19 +146,24 @@ module.exports.doRegister = (req, res, next) => {
     req.body.profilePictures = req.files.map((file) => file.path);
   }
 
-  User.find({$or:[{email: req.body.email},{username: req.body.username}]})
-  .then(user => {
-    if (user.length != 0) {
-      renderWithErrors("Username or email already in use. Log in or try a different combination.", req.body)
-      } else {
-        createUser(req.body)
-      }
+  User.find({
+    $or: [{ email: req.body.email }, { username: req.body.username }],
   })
-  .catch(e => {
-      console.log('error checking users in DB: ', e);
+    .then((user) => {
+      if (user.length != 0) {
+        renderWithErrors(
+          "Username or email already in use. Log in or try a different combination.",
+          req.body
+        );
+      } else {
+        createUser(req.body);
+      }
+    })
+    .catch((e) => {
+      console.log("error checking users in DB: ", e);
       renderWithErrors(e);
-    }); 
-}
+    });
+};
 
 module.exports.doLogin = (req, res, next) => {
   passport.authenticate("local-auth", (error, user, validations) => {
@@ -219,58 +233,83 @@ module.exports.doLoginFacebook = (req, res, next) => {
 };
 
 module.exports.help = (req, res, next) => {
-  res.render('help')
+  res.render("help");
 };
 
 module.exports.doHelp = (req, res, next) => {
   if (req.body.forgot) {
-    User.findOne({ email: req.body.email })
-    .then((u) => {
+    User.findOne({ email: req.body.email }).then((u) => {
       if (u == null) {
-        res.status(400).render('help', { user: req.body, errorMessage: "E-mail not found." })
-        }
-      else if (u.active) {
-        res.render('help', { user: req.body, errorMessage: "Your account is already activated. You can log-in." })
+        res.status(400).render("help", {
+          user: req.body,
+          errorMessage: "E-mail not found.",
+        });
+      } else if (u.active) {
+        res.render("help", {
+          user: req.body,
+          errorMessage: "Your account is already activated. You can log-in.",
+        });
       } else {
         sendActivationEmail(u.email, u.firstName, u.activationToken);
-        res.render('help', { user: req.body, succesMessage: "E-mail sent. Check your inbox." })
+        res.render("help", {
+          user: req.body,
+          succesMessage: "E-mail sent. Check your inbox.",
+        });
         next;
       }
-    })
+    });
   } else if (req.body.reset) {
-      User.findOne({ email: req.body.email })
-      .then((u) => {
+    User.findOne({ email: req.body.email }).then((u) => {
       if (u == null) {
-        res.status(400).render('help', { user: req.body, errorMessage: "E-mail not found." })
-        }
-      else {
+        res.status(400).render("help", {
+          user: req.body,
+          errorMessage: "E-mail not found.",
+        });
+      } else {
         sendResetEmail(u.email, u.firstName, u.activationToken);
-        res.render('help', { user: req.body, succesMessage: "Reset e-mail sent. Check your inbox to continue the process." })
+        res.render("help", {
+          user: req.body,
+          succesMessage:
+            "Reset e-mail sent. Check your inbox to continue the process.",
+        });
         next;
       }
-    })
+    });
   }
 };
 
 module.exports.reset = (req, res, next) => {
-  res.render("user/reset", { email: req.params.email, token: req.params.token });
+  res.render("user/reset", {
+    email: req.params.email,
+    token: req.params.token,
+  });
 };
 
 module.exports.doReset = (req, res, next) => {
   if (req.body.password.match(PASSWORD_PATTERN)) {
-    User.hashPassword(req.body.password)
-    .then((p) => {
-      User.findOneAndUpdate({ email: req.body.email, activationToken: req.body.token }, { password: p})
-      .then(()=> {
-            res.render("./login", { email: req.body.email, token: req.body.token, succesMessage: 'Password updated. You can now log in with your new password.' });
-      }
+    User.hashPassword(req.body.password).then((p) => {
+      User.findOneAndUpdate(
+        { email: req.body.email, activationToken: req.body.token },
+        { password: p }
       )
-      .catch((e) => next(e));
-    })
+        .then(() => {
+          res.render("./login", {
+            email: req.body.email,
+            token: req.body.token,
+            succesMessage:
+              "Password updated. You can now log in with your new password.",
+          });
+        })
+        .catch((e) => next(e));
+    });
   } else {
-    res.render("user/reset", { email: req.body.email, token: req.body.token, errorMessage: 'Invalid password. Must have 1 number, 1 uppercase, 1 lowercase and 8 characters.' });
+    res.render("user/reset", {
+      email: req.body.email,
+      token: req.body.token,
+      errorMessage:
+        "Invalid password. Must have 1 number, 1 uppercase, 1 lowercase and 8 characters.",
+    });
   }
-
 };
 
 module.exports.view = (req, res, next) => {
@@ -282,20 +321,19 @@ module.exports.view = (req, res, next) => {
       },
     })
     .then((user) => {
-      console.log(user[0])
       likedByUser = req.currentUser.liked.includes(user[0]._id);
       let userLocations = [
         {
-        username: user[0].username, 
-        coordinates: user[0].location.coordinates, 
-        userPicture: user[0].profilePictures 
-      },
+          username: user[0].username,
+          coordinates: user[0].location.coordinates,
+          userPicture: user[0].profilePictures,
+        },
         {
-        username: user[0].username, 
-        coordinates: user[0].location.coordinates, 
-        userPicture: user[0].profilePictures 
-      }];
-      console.log(userLocations)
+          username: user[0].username,
+          coordinates: user[0].location.coordinates,
+          userPicture: user[0].profilePictures,
+        },
+      ];
       res.render("user/view", { user, likedByUser, userLocations });
     });
 };
@@ -324,13 +362,6 @@ module.exports.activate = (req, res, next) => {
 };
 
 module.exports.like = (req, res, next) => {
-  console.log(
-    "USERID: " +
-      req.params.userId +
-      "\n" +
-      "CURRENTUSER: " +
-      req.currentUser._id
-  );
   User.find({
     _id: req.currentUser._id,
     liked: { $elemMatch: { $eq: req.params.userId } },
@@ -368,7 +399,7 @@ module.exports.like = (req, res, next) => {
                 );
                 User.findByIdAndUpdate(
                   req.currentUser._id,
-                  { $push: { matched: req.params.userId } },
+                  { $push: { matches: req.params.userId } },
                   { useFindAndModify: false }
                 ).then((user) => {
                   console.log(`Match added to ${user.username}`);
@@ -411,7 +442,6 @@ module.exports.like = (req, res, next) => {
           })
           .catch((e) => console.log(e));
       }
-      //res.redirect(`/user/${likedUSer.username}`)
     })
     .catch((e) => console.log(e));
 };
@@ -427,11 +457,10 @@ module.exports.addComment = (req, res, next) => {
 };
 
 module.exports.deleteComment = (req, res, next) => {
-  Comment.deleteOne({_id: req.params.id})
-  .then((c) => {
-    req.flash('flashMessage', 'Message deleted!');
-    if (req.headers.referer.includes('/profile')) {
-      res.redirect('/profile')
+  Comment.deleteOne({ _id: req.params.id }).then((c) => {
+    req.flash("flashMessage", "Message deleted!");
+    if (req.headers.referer.includes("/profile")) {
+      res.redirect("/profile");
     } else {
       res.redirect(`/user/${req.params.username}`);
     }
@@ -440,22 +469,27 @@ module.exports.deleteComment = (req, res, next) => {
 
 module.exports.favorites = (req, res, next) => {
   User.findOne({ _id: res.locals.currentUser._id })
-  .populate({
-      path: "liked",
-      populate: {
-        path: "like_user",
-      },
-    })
-    .populate({
-      path: "matches",
-      populate: {
-        path: "matches_user",
-      },
-    })
-  .then((u) => {
-    if (u.matches.length > 0) {
-      req.flash("flashMessage", "Congrats! Your have matched with other users. Contact them, but remember... you can't meet yet!");
-    }
-    res.render("favorites", { user: u })}
-    )
+    .populate("liked")
+    .populate("matches")
+    // .populate({
+    //   path: "liked",
+    //   populate: {
+    //     path: "like_user",
+    //   },
+    // })
+    // .populate({
+    //   path: "matches",
+    //   populate: {
+    //     path: "matches_user",
+    //   },
+    // })
+    .then((u) => {
+      if (u.matches.length > 0) {
+        req.flash(
+          "flashMessage",
+          "Congrats! Your have matched with other users. Contact them, but remember... you can't meet yet!"
+        );
+      }
+      res.render("favorites", { user: u });
+    });
 };
