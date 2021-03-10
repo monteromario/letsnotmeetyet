@@ -33,11 +33,14 @@
         <li class="list-group-item">{{firstName}} {{lastName}}</li>
         <li class="list-group-item">{{gender}}</li>
         <li class="list-group-item">Interested in: {{preferences}}</li>
+        {{#ifeq username ../currentUser.username}}
+        {{else}}
         <li class="list-group-item">
           <button onclick="like(this)" data-user_id="{{_id}}"
             class="btn like {{#if ../likedByUser}}btn-outline-danger{{else}}btn-outline-secondary{{/if}}"><i
               class="fa fa-heart" aria-hidden="true"></i></button>
         </li>
+        {{/ifeq}}
       </ul>
       <div id="itsAMatch" class="text-center"></div>
     </div>
