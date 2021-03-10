@@ -1,8 +1,20 @@
 const User = require("../models/User.model");
 
 module.exports.home = (req, res, next) => {
-  User.find({ active: true })
-    .then(users => res.render("home", { users }))
+  if (res.locals.currentUser) {
+    if (res.locals.currentUser.preferences == 'Female') {
+      User.find({ active: true, gender: 'Female' })
+      .then(users => res.render("home", { users }))
+    } else if (res.locals.currentUser.preferences == 'Male') {
+      User.find({ active: true, gender: 'Male' })
+      .then(users => res.render("home", { users }))
+    } else {
+      User.find({ active: true })
+      .then(users => res.render("home", { users }))
+    }
+  } else {
+    res.render("home")
+  }
 };
 
 

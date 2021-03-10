@@ -126,6 +126,10 @@ userSchema.pre("save", function (next) {
   }
 });
 
+userSchema.statics.hashPassword = function (passwordToHash) {
+    return bcrypt.hash(passwordToHash, SALT_ROUNDS);
+};
+
 userSchema.index({ location: '2dsphere' });
 
 userSchema.virtual('likes', {
@@ -138,6 +142,18 @@ userSchema.virtual('comments', {
 	ref: 'Comment',
 	localField: '_id',
 	foreignField: 'profile'
+});
+
+userSchema.virtual('like_user', {
+	ref: 'LikeUser',
+	localField: 'likes',
+	foreignField: '_id'
+});
+
+userSchema.virtual('matches_user', {
+	ref: 'MatchUser',
+	localField: 'matches',
+	foreignField: '_id'
 });
 
 const User = mongoose.model("User", userSchema);

@@ -47,7 +47,14 @@
       {{/each}}
     </div>
     <div id="divLocation" class="text-center" hidden>
-      {{location}}
+      <div id="map" class="row mx-3 my-5"></div>
+        <script>
+        let userLocations = {{{ json ../userLocations }}}
+        </script>
+        <script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
+        <script src="/js/mainMap.js"></script>
+        <script async src="https://maps.googleapis.com/maps/api/js?key={{mapsKey}}&callback=initMap">
+        </script>
     </div>
     <div id="divComments" hidden>
       {{#if comments}}

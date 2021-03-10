@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="text-center py-5">
+        <h3 class="mb-4">Password reset</h3>
+        {{#if succesMessage}}
+        <div class="alert alert-success mt-2" role="alert">
+            {{succesMessage}}
+        </div>
+        {{/if}}
+        {{#if errorMessage}}
+        <div class="alert alert-danger mt-2" role="alert">
+            {{errorMessage}}
+        </div>
+        {{/if}}
+        <div class="row d-flex justify-content-center">
+            <div class="card bg-light m-3" style="max-width: 36rem;">
+                <div class="card-header">Reset your password</div>
+                <div class="card-body">
+                    <h1 class="card-title"><i class="fas fa-key"></i></h1>
+                    <p class="card-text">Set your new password. It has to be
+                        secure enough (At least 8 characters with 1 uppercase, 1
+                        lowercase and 1 number).</p>
+                    <form class="pt-3" action="/reset" method="POST">
+                        <input type="text" name="token" value="{{token}}"
+                            hidden>
+                        <input type="text" name="email" value="{{email}}"
+                            hidden>
+                        <div class="row mb-3">
+                            <label for="inputPassword1" class="col-sm-4
+                                col-form-label">New password</label>
+                            <div class="col-sm-8">
+                                <input type="password" class="form-control"
+                                    id="password"
+                                    name="password" placeholder="New password"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputPassword2" class="col-sm-4
+                                col-form-label">Repeat password</label>
+                            <div class="col-sm-8">
+                                <input type="password" class="form-control"
+                                    id="confirm_password" placeholder="Repeat
+                                    password" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-dark mt-3 mb-3">Set
+                            new password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="mb-5">
+            <a href="/register"><button class="btn btn-outline-dark m-3">Go
+                    back to register page</button></a>
+            <a href="/login"><button class="btn btn-outline-dark m-3">Go
+                    back to log-in page</button></a>
+        </div>
+    </div>
+</div>
+
+<script src="/js/form.js"></script>

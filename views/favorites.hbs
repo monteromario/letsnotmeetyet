@@ -1,0 +1,50 @@
+<div class="row d-flex justify-content-center mb-5 pb-4 mt-3">
+    <div class="card bg-light m-3" style="max-width: 28rem;">
+        <div class="card-header"><h5><i class="fab fa-gratipay"></i> Your
+                matches</h5></div>
+        {{#if user.matches}}
+        {{#each user.matches}}
+        <div class="card m-3">
+            <div class="card-body">
+                <h5 class="card-title">{{username}}</h5>
+                <p class="card-text">With supporting text below as a natural
+                    lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+        {{/each}}
+        {{else}}
+        <div class="card-body">
+            <p class="card-text">You have no matches yet. <i class="fas
+                    fa-heart-broken"></i></p>
+            <p>Keep on liking!</p>
+            <a href="/" class="btn btn-dark">Discover people</a>
+        </div>
+        {{/if}}
+    </div>
+    <div class="card bg-light m-3" style="max-width: 28rem;">
+        <div class="card-header"><h5><i class="far fa-thumbs-up"></i> Your likes</h5></div>
+        {{#if user.liked}}
+        {{#each user.liked}}
+        <div class="card m-3">
+            <div class="card-body row">
+                <div class="col-4 mt-auto mb-auto"><img src="{{profilePictures.[0]}}" class="img-favorite"></div>
+                <div class="col-8 px-3">
+                    <h5 class="card-title">{{username}}</h5>
+                    <p class="card-text">{{firstName}} {{lastName}}</p>
+                    <a href="/user/{{username}}" class="btn btn-dark">Message
+                        {{firstName}}</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+        {{else}}
+        <div class="card-body">
+            <p class="card-text">You haven't liked anyone yet. <i class="far
+                    fa-sad-tear"></i></p>
+            <p>What are you waiting for? Start liking!</p>
+            <a href="/" class="btn btn-dark">Discover people</a>
+        </div>
+        {{/if}}
+    </div>
+</div>
