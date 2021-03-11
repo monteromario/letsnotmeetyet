@@ -399,12 +399,14 @@ module.exports.like = (req, res, next) => {
                 );
                 User.findByIdAndUpdate(
                   req.params.userId,
-                  { $push: { matched: req.currentUser._id } },
+                  { $push: { matches: req.currentUser._id } },
                   { useFindAndModify: false }
-                ).then((user) => console.log(`Match added to ${user.username} 1/2`));
+                ).then((user) =>
+                  console.log(`Match added to ${user.username} 1/2`)
+                );
                 User.findByIdAndUpdate(
                   req.currentUser._id,
-                  { $push: { matched: req.params.userId } },
+                  { $push: { matches: req.params.userId } },
                   { useFindAndModify: false }
                 ).then((user) => {
                   console.log(`Match added to ${user.username} 2/2`);
@@ -439,7 +441,7 @@ module.exports.like = (req, res, next) => {
             });
             User.findByIdAndUpdate(
               req.params.userId,
-              { $pull: { matched: req.currentUser._id } },
+              { $pull: { matches: req.currentUser._id } },
               { useFindAndModify: false }
             ).then((user) => console.log(`Match removed ${user.username} 1/2`));
             User.findByIdAndUpdate(
