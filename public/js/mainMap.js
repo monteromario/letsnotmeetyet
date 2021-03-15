@@ -11,10 +11,10 @@ function initMap() {
 
   const markers = userLocations.map((user) => {
     let icon = {
-      url: user.userPicture, // url
+      url: user.userPicture,
       origin: new google.maps.Point(0, 0),
       anchor: new google.maps.Point(0, 0),
-      scaledSize: new google.maps.Size(50, 50), // scaled size
+      scaledSize: new google.maps.Size(50, 50),
     };
 
     let shape = {
@@ -33,14 +33,12 @@ function initMap() {
       "</form >" +
       "</div>"
 
-    //"<input type='button' onClick=getDir() value='Go!'>" + TODO get route to marker
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
     });
 
     const marker = new google.maps.Marker({
       position: { lat: user.coordinates[1], lng: user.coordinates[0] },
-      //label: user.username,
       icon: icon,
       shape: shape,
       map: map

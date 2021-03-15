@@ -9,11 +9,6 @@ function initMap() {
     zoom: 15,
   });
 
-  //   let initMarker = new google.maps.Marker({
-  //     position: mapMarker || defaultPosition,
-  //     map: map,
-  //   });
-
   mapMarker = new google.maps.Marker({
     position: mapMarker || defaultPosition,
     map: map,
@@ -44,7 +39,6 @@ function initMap() {
   locationButton.classList.add("custom-map-control-button");
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
   locationButton.addEventListener("click", () => {
-    // Try HTML5 geolocation.
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -66,7 +60,6 @@ function initMap() {
         }
       );
     } else {
-      // Browser doesn't support Geolocation
       handleLocationError(false, infoWindow, map.getCenter());
     }
   });

@@ -23,11 +23,6 @@ module.exports.profile = (req, res, next) => {
           coordinates: user[0].location.coordinates,
           userPicture: user[0].profilePictures,
         },
-        {
-          username: user[0].username,
-          coordinates: user[0].location.coordinates,
-          userPicture: user[0].profilePictures,
-        },
       ];
       res.render("user/profile", { user, userLocations });
     });
@@ -328,11 +323,6 @@ module.exports.view = (req, res, next) => {
           coordinates: user[0].location.coordinates,
           userPicture: user[0].profilePictures,
         },
-        {
-          username: user[0].username,
-          coordinates: user[0].location.coordinates,
-          userPicture: user[0].profilePictures,
-        },
       ];
       res.render("user/view", { user, likedByUser, userLocations });
     });
@@ -398,18 +388,11 @@ module.exports.like = (req, res, next) => {
                   "ITS A MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATCH"
                 );
                 User.findByIdAndUpdate(
-                  req.params.userId,
-                  { $push: { matches: req.currentUser._id } },
-                  { useFindAndModify: false }
-                ).then((user) =>
-                  console.log(`Match added to ${user.username} 1/2`)
-                );
-                User.findByIdAndUpdate(
                   req.currentUser._id,
                   { $push: { matches: req.params.userId } },
                   { useFindAndModify: false }
                 ).then((user) => {
-                  console.log(`Match added to ${user.username} 2/2`);
+                  console.log(`Match added to ${user.username}`);
                   //Return response to front
                   res.json({ liked: true, match: true });
                 });
@@ -440,15 +423,10 @@ module.exports.like = (req, res, next) => {
               );
             });
             User.findByIdAndUpdate(
-              req.params.userId,
-              { $pull: { matches: req.currentUser._id } },
-              { useFindAndModify: false }
-            ).then((user) => console.log(`Match removed ${user.username} 1/2`));
-            User.findByIdAndUpdate(
               req.currentUser._id,
               { $pull: { matches: req.params.userId } },
               { useFindAndModify: false }
-            ).then((user) => `Match also removed in ${user.username} 2/2`);
+            ).then((user) => `Match also removed in ${user.username} ddbb`);
             //Return response to front
             res.json({ liked: false });
           })
@@ -483,18 +461,6 @@ module.exports.favorites = (req, res, next) => {
   User.findOne({ _id: res.locals.currentUser._id })
     .populate("liked")
     .populate("matches")
-    // .populate({
-    //   path: "liked",
-    //   populate: {
-    //     path: "like_user",
-    //   },
-    // })
-    // .populate({
-    //   path: "matches",
-    //   populate: {
-    //     path: "matches_user",
-    //   },
-    // })
     .then((u) => {
       if (u.matches.length > 0) {
         req.flash(

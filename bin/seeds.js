@@ -1,11 +1,9 @@
 const faker = require("faker");
 faker.locale = "es";
 require("../config/db.config");
-//const Product = require("../models/Product.model");
 const User = require("../models/User.model");
 
 Promise.all([User.deleteMany()]).then(() => {
-  // Create N users
   for (let i = 0; i < 20; i++) {
     let genders = ['Male', 'Female', 'Other'];
     let preferences = ['Male', 'Female', 'All'];
@@ -22,16 +20,6 @@ Promise.all([User.deleteMany()]).then(() => {
       password: "Abcde1234",
       active: "true", 
     })
-    // .then((u) => {
-
-    //   for (let j = 0; j < 3; j++) {
-    //     Product.create({
-    //       name: faker.commerce.productName(),
-    //       description: faker.commerce.productDescription(),
-    //       price: faker.commerce.price(),
-    //       seller: u._id,
-    //       image: faker.image.image(),
-    //     })
     .then((p) => console.log(`Created ${p.username} with address ${p.location}`))
     .catch(e => console.log(e));
     }

@@ -12,7 +12,6 @@ require("./config/db.config");
 require('./config/passport.config')
 require('./config/hbs.config')
 
-// Express config
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -37,7 +36,6 @@ app.use((req, res, next) => {
 
 app.use("/", routes);
 
-// Error handler
 app.use((req, res, next) => {
   next(createError(404));
 });
@@ -51,6 +49,5 @@ app.use((error, req, res, next) => {
   res.render("error", {error} );
 });
 
-// Initialization on port
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
