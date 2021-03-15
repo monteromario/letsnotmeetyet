@@ -13,6 +13,13 @@
 - Search for other users
 - Write messages
 
+
+## Authors
+
+- [Pedro J. Sola](https://github.com/pedroscampoy)
+- [Mario Montero](https://github.com/monteromario)
+
+
 ## Screenshots
 
 ![home_page](https://res.cloudinary.com/letsnotmeetyet/image/upload/v1615499818/letsnotmeetyet/pictures/screen_01_ii3wiw.jpg)
